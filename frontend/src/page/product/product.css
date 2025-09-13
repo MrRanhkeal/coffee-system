@@ -1,0 +1,12 @@
+.product_image{
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+}
+.khmer-search input::placeholder {
+  font-family: 'Noto Sans Khmer', Roboto, sans-serif !important;
+}
+
+.khmer-search input::-webkit-input-placeholder {
+  font-family: 'Noto Sans Khmer', Roboto, sans-serif !important;
+}

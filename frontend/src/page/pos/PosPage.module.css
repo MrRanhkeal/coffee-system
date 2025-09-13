@@ -1,0 +1,19 @@
+.grid1 {
+  border-right: 1px solid gray;
+}
+.rowSummary {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  border-bottom: 1px solid gray;
+}
+.khmer-search input::placeholder {
+  font-family: 'Noto Sans Khmer', Roboto, sans-serif !important;
+}
+
+.khmer-search input::-webkit-input-placeholder {
+  font-family: 'Noto Sans Khmer', Roboto, sans-serif !important;
+}
+.khmer-search input {
+  font-family: 'Noto Sans Khmer', 'Roboto', sans-serif !important;
+}
