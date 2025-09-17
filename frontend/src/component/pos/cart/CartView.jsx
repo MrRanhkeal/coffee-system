@@ -3,7 +3,7 @@ import { Button, Input, InputNumber, Select, Empty } from 'antd';
 import PropTypes from 'prop-types';
 // import styled, { keyframes } from 'styled-components'; 
 import BillItem from '../BillItem';
-import MyQRCode from '../../../assets/myqr.jpg';
+// Removed static QR placeholder; dynamic KHQR will be generated at checkout
 
 // Define the keyframes
 const redPulse = {
@@ -174,25 +174,21 @@ function CartView({
                     </div>
                     {objSummary.payment_method === 'QR' && (
                         <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
-                            <label style={{ fontWeight: 'bold', marginBottom: '4px', display: 'block' }}>Scan QR Code to Pay</label>
+                            <label style={{ fontWeight: 'bold', marginBottom: '4px', display: 'block' }}>QR Payment Selected</label>
                             <div style={{
-                                padding: '2px',
+                                padding: '12px 16px',
                                 backgroundColor: "rgb(240, 241, 240)",
                                 borderRadius: '8px',
                                 border: '1px solid #d9d9d9',
-                                display: 'inline-block'
+                                display: 'inline-block',
+                                maxWidth: '100%'
                             }}>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                    <img src={MyQRCode} alt="QR Code" style={{ width: '25%', height: 'auto' }} />
-                                    <div style={{ textAlign: 'left' }}>
-                                        <div style={{ ...redPulse, fontSize: '16px', fontWeight: 'bold', margin: '10% 10% 0 10%', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
-                                            Pay to this QR Code
-                                            <br />
-                                            ចំនួន: ${objSummary.total.toFixed(2)}
-                                        </div>
-                                        <div style={{ ...redPulse, fontSize: '14px', margin: '8px 8px 8px 8px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
-                                            ស្កេនជាមួយកម្មវិធីបង់ប្រាក់លើទូរស័ព្ទរបស់អ្នក
-                                        </div>
+                                <div style={{ textAlign: 'left' }}>
+                                    <div style={{ ...redPulse, fontSize: '16px', fontWeight: 'bold', margin: '0 8px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                                        ចំនួនសរុប: ${objSummary.total.toFixed(2)}
+                                    </div>
+                                    <div style={{ fontSize: '14px', margin: '8px', color: '#666', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                                        សូមចុច &quot;Checkout&quot; ដើម្បីបង្កើត KHQR និងបង់ប្រាក់តាមធនាគារ Bakong
                                     </div>
                                 </div>
                             </div>
@@ -250,7 +246,7 @@ function CartView({
                         zIndex: 10,
                         marginTop: '8px'
                     }}
-                    disabled={state.cart_list.length === 0 || paidInUSD < objSummary.total}
+                    disabled={state.cart_list.length === 0 || (objSummary.payment_method !== 'QR' && paidInUSD < objSummary.total)}
                 >
                     Checkout
                 </Button>
@@ -269,6 +265,5 @@ CartView.propTypes = {
     handleDescrease: PropTypes.func.isRequired,
     handleRemove: PropTypes.func.isRequired,
     handleClickOut: PropTypes.func.isRequired
-};
-
+}; 
 export default CartView

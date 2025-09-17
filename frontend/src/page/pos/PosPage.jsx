@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Col, message, notification, Row, Space, Card, Typography, Input, Empty, Flex } from "antd";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Col, message, notification, Row, Space, Card, Typography, Input, Empty, Flex, Modal, Button } from "antd";
 import PropTypes from "prop-types";
 import MainPage from "../../component/layout/MainPage";
 import ProductItem from "../../component/pos/ProductItem";
@@ -11,12 +11,15 @@ import PrintInvoice from "../../component/pos/PrintInvoice";
 import { request } from "../../util/helper";
 import { getProfile } from "../../store/profile.store";
 import { FiSearch } from "react-icons/fi";
+import { QRCodeSVG } from "qrcode.react";
 
 function PosPage() {
     const { Text } = Typography;
 
     const profile = getProfile();
     const refInvoice = React.useRef(null);
+    const pollRef = useRef(null);
+    const timerRef = useRef(null);
 
     const [state, setState] = useState({
         list: [],
@@ -41,6 +44,17 @@ function PosPage() {
         order_no: null, // set after order
         order_date: null, // set after order
     });
+
+    // KHQR Modal state
+    const [qrModal, setQrModal] = useState({
+        open: false,
+        qr: '',
+        md5: '',
+        expiresAt: 0,
+        status: 'pending',
+    });
+    const [qrRemainMs, setQrRemainMs] = useState(0);
+    const [forceLoading, setForceLoading] = useState(false);
 
     const refPage = React.useRef(1);
 
@@ -136,7 +150,7 @@ function PosPage() {
             console.error('Error getting products:', error);
             setState(pre => ({ ...pre, loading: false }));
         }
-    }, [filter, handleAdd]);
+    }, [filter]);
 
     const getCustomers = useCallback(async () => {
         try {
@@ -208,6 +222,14 @@ function PosPage() {
     useEffect(() => {
         getCategories();
     }, [getCategories]);
+
+    // Cleanup timers on unmount
+    useEffect(() => {
+        return () => {
+            if (pollRef.current) clearInterval(pollRef.current);
+            if (timerRef.current) clearInterval(timerRef.current);
+        };
+    }, []);
 
     useEffect(() => {
         if (filter.category_id !== undefined) {
@@ -363,9 +385,94 @@ function PosPage() {
     //     }
     // };
 
+    // Move print handlers above finalizeSuccess to avoid TDZ on dependency array
+    const onBeforePrint = React.useCallback(() => {
+        console.log("`onBeforePrint` called");
+        return Promise.resolve();
+    }, []);
+
+    const onAfterPrint = React.useCallback((event) => {
+        handleClearCart();
+        console.log("`onAfterPrint` called", event);
+    }, [handleClearCart]);
+
+    const onPrintError = React.useCallback(() => {
+        console.log("`onPrintError` called");
+    }, []);
+
+    const handlePrintInvoice = useReactToPrint({
+        // content: () => refInvoice.current,        // required
+        // onBeforePrint,                            // optional
+        // onAfterPrint,                             // optional
+        // onPrintError,                             // optional
+        contentRef: refInvoice,
+        onBeforePrint: onBeforePrint,
+        onAfterPrint: onAfterPrint,
+        onPrintError: onPrintError,
+    });
+
+    const finalizeSuccess = useCallback(() => {
+        if (pollRef.current) clearInterval(pollRef.current);
+        if (timerRef.current) clearInterval(timerRef.current);
+        setQrModal((m) => ({ ...m, status: 'paid' }));
+
+        // Print and cleanup
+        setTimeout(() => {
+            handlePrintInvoice();
+            setTimeout(() => {
+                handleClearCart();
+                setObjSummary({
+                    sub_total: 0,
+                    total_qty: 0,
+                    save_discount: 0,
+                    tax: 10,
+                    total: 0,
+                    total_paid: 0,
+                    customer_id: null,
+                    customer_name: null,
+                    payment_method: null,
+                    remark: '0',
+                    order_no: null,
+                    order_date: null,
+                });
+                setQrModal({ open: false, qr: '', md5: '', expiresAt: 0, status: 'pending' });
+                message.success('Payment successful');
+            }, 800);
+        }, 400);
+    }, [handleClearCart, handlePrintInvoice, setObjSummary]);
+
+    const handleExpired = useCallback(() => {
+        if (pollRef.current) clearInterval(pollRef.current);
+        if (timerRef.current) clearInterval(timerRef.current);
+        setQrModal((m) => ({ ...m, status: 'expired' }));
+        notification.warning({
+            message: 'QR Expired',
+            description: 'The KHQR has expired. Please try again.',
+            placement: 'top'
+        });
+    }, []);
+
+    const handleForceComplete = useCallback(async () => {
+        try {
+            if (!qrModal.md5) return;
+            setForceLoading(true);
+            const res = await request('payment/force', 'post', { md5: qrModal.md5 });
+            if (res && !res.error) {
+                finalizeSuccess();
+            } else {
+                throw new Error(res?.message || 'Failed to force-complete payment');
+            }
+        } catch (e) {
+            notification.error({ message: 'Force Complete Failed', description: e.message || 'Could not complete payment manually.' });
+        } finally {
+            setForceLoading(false);
+        }
+    }, [qrModal.md5, finalizeSuccess]);
+
     const handleClickOut = async () => {
-        // Check if paid amount is sufficient
-        if (objSummary.total_paid < objSummary.total) {
+        const isQR = (objSummary.payment_method || 'Cash') === 'QR';
+        // For cash, ensure sufficient payment; for QR, allow to proceed
+        if (!isQR && objSummary.total_paid < objSummary.total) {
             notification.error({
                 message: "Insufficient Payment",
                 description: "Paid amount is not sufficient, please check again!",
@@ -393,7 +500,7 @@ function PosPage() {
             const param = {
                 order: {
                     total_amount: objSummary.total,
-                    paid_amount: objSummary.total_paid,
+                    paid_amount: isQR ? 0 : objSummary.total_paid,
                     total_qty: objSummary.total_qty,
                     save_discount: objSummary.save_discount,
                     customer_id: objSummary.customer_id || 'Guest',
@@ -407,44 +514,92 @@ function PosPage() {
             const res = await request("order", "post", param);
 
             if (res && !res.error) {
-                message.success("Order completed successfully!");
+                // Branch by payment method
+                if ((objSummary.payment_method || 'Cash') === 'QR') {
+                    if (!res.qr || !res.md5) {
+                        throw new Error('Failed to generate KHQR');
+                    }
 
-                // Update order information for the invoice
-                const invoiceData = {
-                    ...objSummary,
-                    order_no: res.order?.order_no,
-                    order_date: res.order?.create_at
-                };
+                    // Set invoice metadata for later printing
+                    setObjSummary(prev => ({
+                        ...prev,
+                        order_no: res.order?.order_no,
+                        order_date: res.order?.create_at
+                    }));
 
-                setObjSummary(invoiceData);
+                    // Open QR modal and start timers/polling
+                    setQrModal({ open: true, qr: res.qr, md5: res.md5, expiresAt: res.expiresAt, status: 'pending' });
+                    setQrRemainMs(Math.max(0, (res.expiresAt || 0) - Date.now()));
 
-                // Print invoice first
-                setTimeout(() => {
-                    handlePrintInvoice();
-                    // Clear cart only after printing
-                    setTimeout(() => {
-                        handleClearCart();
-                        // Reset summary after clearing cart
-                        setObjSummary({
-                            sub_total: 0,
-                            total_qty: 0,
-                            save_discount: 0,
-                            tax: 10,
-                            total: 0,
-                            total_paid: 0,
-                            customer_id: null,
-                            customer_name: null,
-                            payment_method: null,
-                            remark: '0',
-                            order_no: null,
-                            order_date: null,
+                    if (timerRef.current) clearInterval(timerRef.current);
+                    timerRef.current = setInterval(() => {
+                        setQrRemainMs((prev) => {
+                            const next = Math.max(0, prev - 1000);
+                            if (next <= 0 && timerRef.current) {
+                                clearInterval(timerRef.current);
+                            }
+                            return next;
                         });
-
                     }, 1000);
-                }, 500);
+
+                    
+
+                    if (pollRef.current) clearInterval(pollRef.current);
+                    pollRef.current = setInterval(async () => {
+                        try {
+                            const check = await request('payment/check', 'post', { md5: res.md5 });
+                            if (check && !check.error) {
+                                const localStatus = check.data?.local_status;
+                                const bakongStatus = check.data?.bakong_status;
+                                if (localStatus === 'paid' || bakongStatus === 'SUCCESS' || bakongStatus === 'MANUAL_CONFIRMED') {
+                                    finalizeSuccess();
+                                } else if (localStatus === 'expired' || Date.now() > (res.expiresAt || 0)) {
+                                    handleExpired();
+                                }
+                            }
+                        } catch {
+                            // ignore transient errors
+                        }
+                    }, 3000);
+
+                    // Do not proceed further here for QR; wait for polling
+                    return;
+                } else {
+                    // Cash flow (existing)
+                    message.success("Order completed successfully!");
+
+                    const invoiceData = {
+                        ...objSummary,
+                        order_no: res.order?.order_no,
+                        order_date: res.order?.create_at
+                    };
+                    setObjSummary(invoiceData);
+
+                    setTimeout(() => {
+                        handlePrintInvoice();
+                        setTimeout(() => {
+                            handleClearCart();
+                            setObjSummary({
+                                sub_total: 0,
+                                total_qty: 0,
+                                save_discount: 0,
+                                tax: 10,
+                                total: 0,
+                                total_paid: 0,
+                                customer_id: null,
+                                customer_name: null,
+                                payment_method: null,
+                                remark: '0',
+                                order_no: null,
+                                order_date: null,
+                            });
+                        }, 1000);
+                    }, 500);
+                }
             } else {
                 throw new Error(res.error || 'Failed to complete order');
             }
+
         } catch (error) {
             notification.error({
                 message: "Order Failed",
@@ -453,30 +608,7 @@ function PosPage() {
             });
         }
     };
-    const onBeforePrint = React.useCallback(() => {
-        console.log("`onBeforePrint` called");
-        return Promise.resolve();
-    }, []);
-
-    const onAfterPrint = React.useCallback((event) => {
-        handleClearCart();
-        console.log("`onAfterPrint` called", event);
-    }, [handleClearCart]);
-
-    const onPrintError = React.useCallback(() => {
-        console.log("`onPrintError` called");
-    }, []);
-
-    const handlePrintInvoice = useReactToPrint({
-        // content: () => refInvoice.current,        // required
-        // onBeforePrint,                            // optional
-        // onAfterPrint,                             // optional
-        // onPrintError,                             // optional
-        contentRef: refInvoice,
-        onBeforePrint: onBeforePrint,
-        onAfterPrint: onAfterPrint,
-        onPrintError: onPrintError,
-    });
+    // moved print handlers above
 
     return (
         <MainPage loading={state.loading}>
@@ -499,6 +631,50 @@ function PosPage() {
                     cashier={profile?.name || 'System'}
                 /> */}
             </div>
+
+            {/* KHQR Payment Modal */}
+            <Modal
+                open={qrModal.open}
+                onCancel={() => {
+                    if (pollRef.current) clearInterval(pollRef.current);
+                    if (timerRef.current) clearInterval(timerRef.current);
+                    setQrModal({ open: false, qr: '', md5: '', expiresAt: 0, status: 'pending' });
+                }}
+                footer={null}
+                title="Scan to Pay (KHQR)"
+                destroyOnClose
+                centered
+            >
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+                    {qrModal.qr ? (
+                        <QRCodeSVG value={qrModal.qr} size={240} includeMargin={true} />
+                    ) : (
+                        <Empty description="Waiting for QR..." />
+                    )}
+                    <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontWeight: 'bold' }}>Amount: ${objSummary.total.toFixed(2)}</div>
+                        <div style={{ color: '#999' }}>Order: {objSummary.order_no || '-'}</div>
+                        <div style={{ marginTop: 8 }}>
+                            {qrModal.status === 'paid' ? (
+                                <span style={{ color: 'green', fontWeight: 'bold' }}>Payment successful</span>
+                            ) : qrModal.status === 'expired' ? (
+                                <span style={{ color: 'red', fontWeight: 'bold' }}>QR expired</span>
+                            ) : (
+                                <span>
+                                    Expires in: {Math.max(0, Math.floor(qrRemainMs / 1000))}s
+                                </span>
+                            )}
+                        </div>
+                        {qrModal.status === 'pending' && qrModal.md5 && (
+                            <div style={{ marginTop: 12 }}>
+                                <Button type="primary" loading={forceLoading} onClick={handleForceComplete}>
+                                    Mark as Paid & Print
+                                </Button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </Modal>
             {/* <Row gutter={24} style={{ height: 'calc(100vh - 64px)', overflow: 'hidden' }}></Row> */}
             <Row gutter={24} style={{ height: 'calc(100vh - 64px)', overflow: 'hidden' }}>
                 <Col span={16} style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '1rem' }}>
@@ -639,5 +815,18 @@ PrintInvoice.propTypes = {
     }),
     // ...
 };
-
+ProductItem.propTypes = {
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    images: PropTypes.arrayOf(PropTypes.string),
+    category_name: PropTypes.string.isRequired,
+    brand: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    discount: PropTypes.number,
+    final_price: PropTypes.number,
+    qty: PropTypes.number,
+    handleAdd: PropTypes.func.isRequired,
+};  
 export default PosPage;

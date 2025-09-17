@@ -55,6 +55,7 @@ try {
 catch (error) {
     logErr("index", error);
 }
+
 // // Dynamic route
 // const routesPath = path.join(__dirname, "src", "route");
 // fs.readdirSync(routesPath).forEach((file) => {

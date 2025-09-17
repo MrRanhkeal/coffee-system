@@ -90,8 +90,8 @@ const PrintInvoice = React.forwardRef(({ cart_list = [], objSummary = {}, cashie
               <h2>INVOICE</h2>
               <p>Invoice #: {objSummary.order_no || generateInvoiceNumber()}</p>
               <p>Date: {objSummary.order_date ? new Date(objSummary.order_date).toLocaleDateString() : new Date().toLocaleDateString()}</p>
-              {/* <p>Time: {objSummary.order_date ? new Date(objSummary.order_date).toLocaleTimeString() : new Date().toLocaleTimeString()}</p> */}
-              <p>Time: {objSummary.order_date ? new Date(objSummary.order_date).toLocaleTimeString('en-US', { hour12: false }) : new Date().toLocaleTimeString('en-US', { hour12: false })}</p>
+              <p>Time: {objSummary.order_date ? new Date(objSummary.order_date).toLocaleTimeString() : new Date().toLocaleTimeString()}</p>
+              {/* <p>Time: {objSummary.order_date ? new Date(objSummary.order_date).toLocaleTimeString('en-US', { hour12: false }) : new Date().toLocaleTimeString('en-US', { hour12: false })}</p> */}
             </div>
           </div>
 

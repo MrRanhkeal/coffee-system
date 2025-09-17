@@ -90,7 +90,7 @@ function RolePage() {
     // Handle delete button click
     const handleDelete = (record) => {
         Modal.confirm({
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>លុប{record.name}</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>លុប {record.name}</span>,
             content: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>តើអ្នកចង់លុប {record.name} មែនទេ ?</span>,
             okText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>បាទ/ចាស</span>,
             okType: 'danger',
@@ -159,7 +159,7 @@ function RolePage() {
             render: (_, __, index) => index + 1
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ឈ្មោះ</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ឈ្មោះតួនាទី</span>,
             dataIndex: "name",
             render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
             key: "name",
@@ -262,9 +262,10 @@ function RolePage() {
                     >
                         <Select
                             mode="multiple"
-                            allowClear
+                            allowClear 
                             placeholder="ជ្រើសសិទ្ធិ"
                             options={permissionOptions}
+                            style={{ width: '100%', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                         />
                     </Form.Item>
                     <Form.Item style={{ textAlign: "right" }}>

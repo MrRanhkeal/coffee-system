@@ -26,11 +26,14 @@ function App() {
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/pos" element={<PosPage />} />
+          {/* <Route path="/pos" element={<PosPage />} />
           <Route path="/customer" element={<CustomerPage />} />
-          <Route path="/order" element={<OrderPage />} /> 
+          <Route path="/order" element={<OrderPage />} />  */}
 
           {/* blocked routes */}
+          <Route path="/pos" element={<ProtectedRoute permissionKey="pos" element={<PosPage />} />} />
+          <Route path="/customer" element={<ProtectedRoute permissionKey="customer" element={<CustomerPage />} />} />
+          <Route path="/order" element={<ProtectedRoute permissionKey="order" element={<OrderPage />} />} />
           <Route path="/product" element={<ProtectedRoute permissionKey="product" element={<ProductPage />} />} />
           <Route path="/category" element={<ProtectedRoute permissionKey="category" element={<CategoryPage />} />} />
           <Route path="/supplier" element={<ProtectedRoute permissionKey="supplier" element={<SupplierPage />} />} />

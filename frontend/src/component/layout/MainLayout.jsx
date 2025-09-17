@@ -243,10 +243,12 @@ const MainLayout = () => {
           new_item_menu.push(item);
         }
       });
-    } else if (permission?.pos || permission?.order || permission?.customer) {
-      // Backward-compatibility special-case for POS-like roles
-      new_item_menu = items_menu.filter(item => ["", "pos", "order", "customer"].includes(item.key));
-    } else if (Array.isArray(permission)) {
+    } 
+    // else if (permission?.pos || permission?.order || permission?.customer) {
+    //   // Backward-compatibility special-case for POS-like roles
+    //   new_item_menu = items_menu.filter(item => ["", "pos", "order", "customer"].includes(item.key));
+    // } 
+    else if (Array.isArray(permission)) {
       // Fallback to old array logic
       items_menu?.map((item1) => {
         // level one

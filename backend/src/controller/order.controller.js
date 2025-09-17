@@ -1,4 +1,6 @@
 const { db, logErr, isArray, isEmpty } = require("../util/helper");
+const { BakongKHQR, khqrData, IndividualInfo } = require("bakong-khqr");
+const { BAKONG } = require("../util/config");
 
 exports.getlist = async (req, res) => {
     try {
@@ -75,68 +77,103 @@ exports.orderdetail = async (req, res) => {
     } catch (error) {
         logErr("order.orderdetail", error, res);
     }
-}; 
-
-//create
+};
 exports.create = async (req, res) => {
     try {
-        var { order, order_details = [] } = req.body;
-        // validate data
+        let { order, order_details = [] } = req.body;
+
+        // Prepare order
         order = {
             ...order,
-            order_no: await newOrderNo(), // gener order_no
-            user_id: req.auth?.id, // currect access
-            create_by: req.auth?.name, // currect access
+            order_no: await newOrderNo(),
+            user_id: req.auth?.id,
+            create_by: req.auth?.name,
         };
-        var sqlOrder =
-            "INSERT INTO orders (order_no,customer_id,total_amount,paid_amount,payment_method,remark,user_id,create_by) VALUES (:order_no,:customer_id,:total_amount,:paid_amount,:payment_method,:remark,:user_id,:create_by) ";
-        var [data] = await db.query(sqlOrder, order);
 
-        await Promise.all(order_details.map(async (item) => {
-            // Insert order detail
-            var sqlOrderDetails =
-                "INSERT INTO order_detail (order_id,product_id,qty,price,discount,total,sugarLevel) VALUES (:order_id,:product_id,:qty,:price,:discount,:total,:sugarLevel) ";
-            await db.query(sqlOrderDetails, {
-                ...item,
-                order_id: data.insertId, // override key order_id
+        // Insert order
+        const sqlOrder = `
+            INSERT INTO orders 
+            (order_no, customer_id, total_amount, paid_amount, payment_method, remark, user_id, create_by) 
+            VALUES (:order_no, :customer_id, :total_amount, :paid_amount, :payment_method, :remark, :user_id, :create_by)
+        `;
+        const [result] = await db.query(sqlOrder, order);
+
+        // Insert order details
+        await Promise.all(order_details.map(item => {
+            const sqlDetails = `
+                INSERT INTO order_detail 
+                (order_id, product_id, qty, price, discount, total, sugarLevel) 
+                VALUES (:order_id, :product_id, :qty, :price, :discount, :total, :sugarLevel)
+            `;
+            return db.query(sqlDetails, { ...item, order_id: result.insertId });
+        }));
+
+        // Fetch inserted order
+        const [currentOrder] = await db.query("SELECT * FROM orders WHERE id=:id", { id: result.insertId });
+
+        // Generate KHQR only for QR payment method
+        let qrResponse = null;
+        if ((order.payment_method || "").toUpperCase() === "QR") {
+            const orderTotal = currentOrder[0].total_amount;
+            const expirationTimestamp = Date.now() + 3 * 60 * 1000;
+
+            const individualInfo = new IndividualInfo(
+                BAKONG.ACCOUNT_ID,
+                BAKONG.ACCOUNT_NAME,
+                BAKONG.CITY,
+                {
+                    currency: khqrData.currency.usd,
+                    amount: orderTotal,
+                    expirationTimestamp
+                }
+            );
+            const khqr = new BakongKHQR();
+            const qrData = khqr.generateIndividual(individualInfo);
+
+            // Insert into payment_orders (initially without Bakong settlement fields; will be updated after check)
+            await db.query(`
+                INSERT INTO payment_orders (
+                    order_id, qr, md5, expiration, created_at, status, currency, amount, description, paid
+                )
+                VALUES (:order_id, :qr, :md5, :expiration, NOW(), 'pending', 'USD', :amount, :description, 0)
+                ON DUPLICATE KEY UPDATE
+                    qr = VALUES(qr),
+                    md5 = VALUES(md5),
+                    expiration = VALUES(expiration),
+                    status = 'pending',
+                    currency = 'USD',
+                    amount = VALUES(amount),
+                    description = VALUES(description),
+                    paid = 0
+            `, {
+                order_id: result.insertId,
+                qr: qrData.data.qr,
+                md5: qrData.data.md5,
+                expiration: expirationTimestamp,
+                amount: orderTotal,
+                description: `POS Order ${currentOrder[0].order_no}`
             });
-            // Deduct stock from stock_cup for each item
-            // if (item.stockproduct_id && item.qty) {
-            //     // Defensive: ensure qty is a positive integer from order_detail
-            //     let order_qty = parseInt(item.qty, 10);
-            //     if (isNaN(order_qty) || order_qty <= 0) {
-            //         console.warn('WARNING: Invalid qty for stock deduction:', item.qty, 'in order_detail:', item);
-            //         return;
-            //     }
-            //     console.log('DEBUG: Cutting stock for stockproduct_id:', item.stockproduct_id, 'order_qty:', order_qty);
-            //     var sqlReStock =
-            //         "UPDATE stock_cup sc"+
-            //         "JOIN order_detail od ON sc.id = od.stockproduct_id AND sc.product_id = od.product_id "+
-            //         "SET sc.qty = sc.qty - od.qty "+
-            //         "WHERE od.order_id = :order_id AND sc.id = :stockproduct_id";
-            //     const [updateResult] = await db.query(sqlReStock, {
-            //         order_qty,
-            //         stockproduct_id: item.stockproduct_id,
-            //     });
-            //     console.log('DEBUG: Stock update result:', updateResult);
-            // }
-        })); 
-        const [currentOrder] = await db.query(
-            "select * from orders where id=:id",
-            {
-                id: data.insertId,
-            }
-        );
+
+            qrResponse = {
+                qr: qrData.data.qr,
+                md5: qrData.data.md5,
+                expiresAt: expirationTimestamp,
+                payment_status: "pending"
+            };
+        }
 
         res.json({
-            order: currentOrder.length > 0 ? currentOrder[0] : null,
-            order_details: order_details,
-            message: "Insert success!",
+            order: currentOrder[0],
+            order_details,
+            ...(qrResponse || {}),
+            message: "Insert success!"
         });
+
     } catch (error) {
         logErr("order.create", error, res);
     }
 };
+
 // //fix newOrderNo
 const newOrderNo = async () => {
     try {

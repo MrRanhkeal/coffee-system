@@ -211,13 +211,14 @@ ProductItem.propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
+  images: PropTypes.arrayOf(PropTypes.string),
   category_name: PropTypes.string.isRequired,
   brand: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   discount: PropTypes.number,
   // barcode: PropTypes.string.isRequired,
   handleAdd: PropTypes.func.isRequired,
-  qty: PropTypes.number.isRequired,
+  qty: PropTypes.number.isRequired, 
 };
 
 export default ProductItem;
