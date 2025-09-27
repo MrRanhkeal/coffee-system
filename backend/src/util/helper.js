@@ -93,17 +93,13 @@ exports.uploadFile = multer({
 //         }
 //     },
 // }); 
-try{
-    exports.removeFile = async (fileName) => {
-        const filePath = path.join(config.image_path, fileName);
-        try {
-            await fs.unlink(filePath);
-            return { success: true, message: "File deleted successfully" };
-        } catch (err) {
-            return { success: false, message: "Error deleting file" };
-        }
-    };
-}
-catch(err){
-    logErr("config", err);
-}
+
+exports.removeFile = async (fileName) => {
+    const filePath = path.join(config.image_path, fileName);
+    try {
+        await fs.unlink(filePath);
+        return { success: true, message: "File deleted successfully" };
+    } catch (err) {
+        return { success: false, message: "Error deleting file" };
+    }
+}; 

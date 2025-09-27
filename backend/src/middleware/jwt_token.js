@@ -30,7 +30,7 @@ exports.validate_token = () => {
             var authorization = req.headers.authorization; //token from client
             var token_from_client = null;
             if (authorization != null && authorization != "") {
-                token_from_client = authorization.split(" "); //authori : Bearer token "13fasd6f4a6dsfsadfiowero3u4r09eru0[9uf"
+                token_from_client = authorization.split(" "); //authori : Bearer token "13fasd6f4a6dsfsadfiowero3u4r09eru0[9uf]"
                 token_from_client = token_from_client[1]; //get only access token
 
             }
@@ -53,9 +53,16 @@ exports.validate_token = () => {
                                 success:false
                             });
                         } else {
-                            req.current_id = result.data.profile.id;
-                            req.auth = result.data.profile; // write user property
-                            req.permision = result.data.permision; // write user property
+                            // normalize request context for downstream handlers
+                            req.current_id = result?.data?.profile?.id;
+                            // backwards compatibility: many controllers reference req.auth
+                            req.auth = result?.data?.profile;
+                            // preferred alias for the signed-in user
+                            req.profile = result?.data?.profile;
+                            // normalized permission object from token payload
+                            // login sets `permission` on payload; keep both spellings for safety
+                            req.permission = result?.data?.permission;
+                            req.permision = result?.data?.permission; // legacy typo compatibility
                             next(); // continue controller
                         }
                     }

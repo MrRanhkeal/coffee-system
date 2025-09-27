@@ -1,8 +1,26 @@
 function checkPermission(permissionKey) {
     return (req, res, next) => {
-        const rolePermissions = req.user?.role?.permissions;
+        // Normalize permission source from various middlewares
+        const perms =
+            req.permission ||
+            req.permision ||
+            req.auth?.permission ||
+            req.profile?.permission ||
+            req.user?.role?.permissions;
 
-        if (!rolePermissions || rolePermissions[permissionKey] !== true) {
+        // Grant all if 'all' flag present
+        if (perms === 'all' || perms?.all === true) {
+            return next();
+        }
+
+        if (!perms) {
+            return res.status(403).json({ message: "Access denied." });
+        }
+
+        const keys = Array.isArray(permissionKey) ? permissionKey : [permissionKey];
+        const allowed = keys.some((k) => perms?.[k] === true);
+
+        if (!allowed) {
             return res.status(403).json({ message: "Access denied." });
         }
 
@@ -11,3 +29,5 @@ function checkPermission(permissionKey) {
 }
 
 module.exports = checkPermission;
+// also expose named export for cases where code does `{ checkPermission } = require(...)`
+module.exports.checkPermission = checkPermission;

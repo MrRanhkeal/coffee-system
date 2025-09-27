@@ -226,7 +226,7 @@ exports.checkPayment = async (md5) => {
 
                 const fromAccountId = br.fromAccountId || br.from?.accountId || br.fromAccount || br.from_account_id || br.from?.account_id || null;
                 const toAccountId = br.toAccountId || br.to?.accountId || br.toAccount || br.to_account_id || br.to?.account_id || BAKONG.ACCOUNT_ID || null;
-                const receiverBank = br.receiverBank || br.to?.bank || br.toBank || br.receiver_bank || null;
+                //const receiverBank = br.receiverBank || br.to?.bank || br.toBank || br.receiver_bank || null;
                 const receiverBankAccount = toAccountId || br.receiverBankAccount || br.receiver_bank_account || null;
 
                 // Debug: if critical fields are missing, log the available keys for inspection

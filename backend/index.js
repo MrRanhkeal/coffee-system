@@ -4,7 +4,7 @@ const cors = require("cors");
 const app = express();
 const fs = require("fs");
 const path = require("path");
-const { log } = require("console");
+// const { log } = require("console");
 
 // Middleware
 app.use(express.json());

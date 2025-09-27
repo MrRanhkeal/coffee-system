@@ -42,11 +42,10 @@ try {
         // app.post("/api/new_barcode",validate_token(),newBarcode);
         // app.get("/api/product_image/:prodcut_id",validate_token(),productImage);
 
-        //permission
-        app.get("/", checkPermission("product"), (req, res) => {
+        // permission check demo endpoint (secured)
+        app.get("/api/product/permission-check", validate_token(), checkPermission("product"), (req, res) => {
             res.status(200).json({ message: "You have permission to access this route." });
-        }
-        );
+        });
     };
 }
 catch (err) {
