@@ -399,7 +399,18 @@ function OrderPage() {
                         title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ថ្ងៃខែបញ្ជារទិញ</span>,
                         dataIndex: "create_at",
                         //render: (value) => formatDateClient(value, "DD/MM/YYYY h:mm A"),
-                        render: (date) => new Date(date).toLocaleDateString("en-GB", { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+                        //render: (date) => new Date(date).toLocaleDateString("en-GB", { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+                        render: (date) =>
+                            new Date(date).toLocaleString("en-GB", {
+                                timeZone: "Asia/Phnom_Penh",
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                second: "2-digit",
+                                hour12: false,
+                            }),
                     },
                     {
                         key: "Action",

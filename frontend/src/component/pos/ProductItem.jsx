@@ -3,7 +3,8 @@ import React from "react";
 import { Config } from "../../util/config";
 import styles from "./ProductItem.module.css";
 import { MdAddCircle } from "react-icons/md";
-import PropTypes from "prop-types";
+import PropTypes from "prop-types"; 
+import { RiAddLargeLine } from "react-icons/ri";
 function ProductItem({
   id,
   name,
@@ -151,6 +152,7 @@ function ProductItem({
             type="primary"
             style={{ marginTop: 16, width: '100%',fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
             icon={<MdAddCircle />}
+            //icon=<IoMdAdd />
             onClick={handleAddWithSugar}  
           >
             បញ្ចូលទៅកន្ត្រក
@@ -198,10 +200,15 @@ function ProductItem({
         <Button
           // onClick={handleAddWithSugar}
           onClick={handleImageClick}
-          // size="small"
-          type="primary"
-          icon={<MdAddCircle />}
+          style={{ color: '#0f9225ff', fontSize: '25px', backgroundColor:'#fdfdffff', border:'none', cursor: 'pointer' }}
+          type="primary" 
+          icon=<RiAddLargeLine/> 
         />
+        {/* <RiAddLargeLine 
+          onClick={handleImageClick}
+          style={{ fontSize: '25px',marginLeft:'230px', color: '#030f03ff', cursor: 'pointer' }}
+          type="primary"
+        /> */}
       </div>
     </div>
   );

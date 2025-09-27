@@ -646,14 +646,50 @@ function PosPage() {
                 centered
             >
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-                    {qrModal.qr ? (
+                    <div style={{ position: 'relative', display: 'inline-block' }}>
                         <QRCodeSVG value={qrModal.qr} size={240} includeMargin={true} />
+                        <div style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            background: 'white',
+                            padding: '2px 6px',
+                            borderRadius: 4,
+                            fontWeight: 'bold',
+                            fontSize: 20, 
+                            color: 'rgba(27, 202, 41, 0.9)',
+                        }}>
+                            ${objSummary.total.toFixed(2)}
+                        </div>
+                    </div>
+                    <div style={{ marginTop: 8 }}>
+                        {qrModal.status === 'paid' ? (
+                            <span style={{ color: 'green', fontWeight: 'bold' }}>Payment successful</span>
+                        ) : qrModal.status === 'expired' ? (
+                            <span style={{ color: 'red', fontWeight: 'bold' }}>QR expired</span>
+                        ) : (
+                            <span>
+                                Expires in: {Math.max(0, Math.floor(qrRemainMs / 1000))}s
+                            </span>
+                        )}
+                    </div>
+                    {qrModal.status === 'pending' && qrModal.md5 && (
+                        <div style={{ marginTop: 12 }}>
+                            <Button type="primary" loading={forceLoading} onClick={handleForceComplete}>
+                                Mark as Paid & Print
+                            </Button>
+                        </div>
+                    )}
+                    {/* {qrModal.qr ? ( 
+                            <QRCodeSVG value={qrModal.qr} size={240} includeMargin={true} /> 
                     ) : (
                         <Empty description="Waiting for QR..." />
-                    )}
-                    <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontWeight: 'bold' }}>Amount: ${objSummary.total.toFixed(2)}</div>
-                        <div style={{ color: '#999' }}>Order: {objSummary.order_no || '-'}</div>
+                    )} */}
+                    
+
+                    {/* <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontWeight: 'bold',fontSize:'16px' }}>Amount: ${objSummary.total.toFixed(2)}</div> 
                         <div style={{ marginTop: 8 }}>
                             {qrModal.status === 'paid' ? (
                                 <span style={{ color: 'green', fontWeight: 'bold' }}>Payment successful</span>
@@ -672,7 +708,7 @@ function PosPage() {
                                 </Button>
                             </div>
                         )}
-                    </div>
+                    </div> */}
                 </div>
             </Modal>
             {/* <Row gutter={24} style={{ height: 'calc(100vh - 64px)', overflow: 'hidden' }}></Row> */}

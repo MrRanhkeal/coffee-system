@@ -12,8 +12,7 @@ export const configStore = create((set) => ({
   },
   setConfig: (params) =>
     set((state) => ({
-      config: params,
-      //...state, //check
+      config: params, 
     })),
     descrease: () =>
       set((state) => ({

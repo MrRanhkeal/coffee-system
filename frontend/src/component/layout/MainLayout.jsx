@@ -12,8 +12,7 @@ import Logo from "../../assets/v-friends.jpg";
 import ImgUser from "../../assets/admin.jpg";
 import { IoIosNotifications } from "react-icons/io";
 import { MdOutlineMarkEmailUnread } from "react-icons/md"; 
-import {
-  getPermission, getProfile, setAcccessToken, setProfile, setPermission } from "../../store/profile.store";
+import { getPermission, getProfile, setAcccessToken, setProfile, setPermission } from "../../store/profile.store";
 import { request } from "../../util/helper";
 import { configStore } from "../../store/configStore";
 // import { icons } from "antd/es/image/PreviewGroup";
@@ -22,76 +21,60 @@ const { Content, Sider } = Layout;
 const items_menu = [
   {
     key: "",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
+    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '16px', fontWeight: 'bold' },
     label: "ទំព័រដើម",
     children: null,
     icon: <HomeOutlined />
   },
   {
     key: "pos",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
+    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
     label: "កាលក់",
     children: null,
     icon: <ShopOutlined />
   },
   {
     label: "ទំនិញ",
-    // children: [
-    //   {
-    //     key: "product",
-    //     label: "List Porduct",
-    //     children: null,
-    //     icon: <UnorderedListOutlined />
-    //   },
-    //   {
-    //     key: "category",
-    //     label: "Category",
-    //     children: null,
-    //     icon: <SortDescendingOutlined />
-    //   },
-    // ],
     key: "product",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
+    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px',fontWeight:'bold' },
     children: null,
-    // icon: <UnorderedListOutlined />
     icon: <AppstoreOutlined />
   },
   {
     key: "category",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
+    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
     label: "ប្រភេទទំនិញ",
     children: null,
     icon: <AppstoreAddOutlined />
   },
   {
     key: "customer",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
+    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
     label: "អតិថិជន",
     children: null,
     icon: <UsergroupAddOutlined />
   },
   {
     key: "order",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
+    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
     label: "ការបញ្ចារទិញ",
     children: null,
     icon: <ShoppingCartOutlined />
   },
   {
     key: "supplier",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
+    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
     label: "អ្នកផ្គត់ផ្គង់",
     children: null,
-    icon: <UserSwitchOutlined />
-    // icon: <ShoppingOutlined />
+    icon: <UserSwitchOutlined /> 
   },
   {
     label: "ការចំណាយ",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
+    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
     children: [
       {
         key: "expanse",
-        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
+        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
         label: "ការចំណាយ",
         children: null,
         icon: <DollarOutlined />
@@ -101,78 +84,55 @@ const items_menu = [
   },
   {
     label: "ស្តុក",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
+    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
     children: [
       {
         key: "stock",
-        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
+        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
         label: "ស្តុកកាហ្វេ",
         children: null,
-        icon: "💹"
-        // icon: <StockOutlined/>
-      },
-      // {
-      //   key: 'product_stock',
-      //   style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
-      //   label: "ស្តុកផ្សេងៗ",
-      //   children: null,
-      //   icon: "💹"
-      //   // icon: <StockOutlined/>
-      // }
+        icon: "💹" ,
+      }, 
     ],
     icon: <SlidersOutlined />
   },
   {
     label: "របាយការណ៍",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
-    children: [
-      // {
-      //   key: "report_sale_summary",
-      //   label: "Sale summary",
-      //   children: null,
-      //   icon: <AlignCenterOutlined />
-      // },
-      // {
-      //   key: "report_expense_summary",
-      //   label: "Expense Summary",
-      //   children: null,
-      //   icon: <AccountBookOutlined />
-      // },
+    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+    children: [ 
       {
         key: "getsalereport",
-        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
+        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
         label: "របាយការណ៍នៃការលក់",
-        children: null,
-        // icon: <LuNotebookText />
+        children: null, 
         icon: <TbReportAnalytics />
       },
       {
         key: "get_sale_summary",
-        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
+        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
         label: "របាយការណ៍លំអិតការលក់",
         children: null,
         icon: <AlignCenterOutlined />
       }
-    ],
-    // icon: <SnippetsOutlined />
+    ], 
     icon: <MdOutlineLibraryBooks />
   },
 
   {
     label: "អ្នកប្រើប្រាស់ទូទៅ",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
+    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
     children: [
       {
         key: "user",
-        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
+        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
         label: "អ្នកប្រើប្រាស់",
         children: null,
         icon: <BsPeople />
       },
       {
         key: "role",
-        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
-        label: "កំណត់ការប្រើប្រាស់",
+        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+        label: "សិទ្ធិប្រើប្រាស់",
         children: null,
         icon: <UserOutlined />
       }
@@ -182,11 +142,11 @@ const items_menu = [
 
   {
     label: "កំណត់",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
+    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
     children: [
       {
         key: "Currency",
-        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'},
+        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px' },
         label: "ប្ដូរប្រាក់",
         children: null,
         icon: <BsCurrencyExchange />
@@ -352,6 +312,7 @@ const MainLayout = () => {
           mode="inline"
           items={items}
           onClick={onClickMenu}
+          className="custom-sidebar-menu"
         />
       </Sider>
       <Layout>

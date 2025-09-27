@@ -24,8 +24,6 @@ const RedPulseKeyframes = () => (
         `}
     </style>
 );
-
-
 function CartView({
     customers,
     state,
@@ -99,8 +97,8 @@ function CartView({
                         <Empty
                             image={Empty.PRESENTED_IMAGE_SIMPLE}
                             description={
-                                <span style={{ color: '#595959' }}>
-                                    Cart is empty
+                                <span style={{ color: '#595959', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '16px',fontWeight:'bold' }}>
+                                    ទទេ
                                 </span>
                             }
                         />
@@ -123,7 +121,7 @@ function CartView({
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
                         <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ចំនួន</span>
-                        <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{objSummary.total_qty} ធាតុ</span>
+                        <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{objSummary.total_qty} Items</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
                         <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ប្រាក់បញ្ចុះតម្លៃ</span>
@@ -188,7 +186,7 @@ function CartView({
                                         ចំនួនសរុប: ${objSummary.total.toFixed(2)}
                                     </div>
                                     <div style={{ fontSize: '14px', margin: '8px', color: '#666', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
-                                        សូមចុច &quot;Checkout&quot; ដើម្បីបង្កើត KHQR និងបង់ប្រាក់តាមធនាគារ Bakong
+                                        សូមចុច &quot;Checkout&quot; ដើម្បីបទូទាត់ប្រាក់តាម KHQR
                                     </div>
                                 </div>
                             </div>

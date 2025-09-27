@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { request } from "../../util/helper";
-import { Button, Form, Input, message, Modal, Space, Table, Select } from "antd";
+import { Button, Form, Input, message, Modal, Space, Table, Select, Tag } from "antd";
 import { DeleteOutlined, EditOutlined, FileAddFilled } from "@ant-design/icons";
 import { } from "react-icons/md";
 
@@ -20,8 +20,7 @@ function RolePage() {
     const [form] = Form.useForm();
     const permissionOptions = [
         { label: 'All', value: 'all' },
-        // core
-        { label: 'Dashboard', value: '' },
+        { label: 'Dashboard', value: 'dashboard' },
         { label: 'POS', value: 'pos' },
         { label: 'Order', value: 'order' },
         { label: 'Customer', value: 'customer' },
@@ -169,28 +168,34 @@ function RolePage() {
             //     textOverflow: "ellipsis"
             // }
         },
-        // {
-        //     title: "Permission",
-        //     dataIndex: "permission",
-        //     key: "permission",
-        //     render: (permission) => {
-        //         if (!permission) return '-';
-        //         try {
-        //             const permArray = typeof permission === 'string'
-        //                 ? JSON.parse(permission)
-        //                 : permission;
+        {
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សិទ្ធិប្រើប្រាស់</span>,
+            dataIndex: "permission",
+            key: "permission",
+            render: (permissionOptions) => {
+                let tags = [];
+                try {
+                    if (permissionOptions === 'all') {
+                        tags.push(<Tag color="blue" key="all" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>All</Tag>);
+                    } else if (permissionOptions) {
+                        const parsed = typeof permissionOptions === 'string' ? JSON.parse(permissionOptions) : permissionOptions;
+                        if (parsed && parsed.all) {
+                            tags.push(<Tag color="blue" key="all" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>All</Tag>);
+                        } else if (parsed && typeof parsed === 'object') {
+                            Object.keys(parsed).forEach(k => {
+                                if (parsed[k]) {
+                                    tags.push(<Tag color="green" key={k} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', textTransform: 'capitalize' }}>{k.replace(/=/g, ' ')}</Tag>);
+                                }
+                            });
+                        }
+                    }
+                } catch {
+                    console.log("Failed to parse permissions");
+                }
+                return <div>{tags.length > 0 ? tags : <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontStyle: 'italic', color: '#7f11b3ff' }}>No Permissions</span>}</div>;
+            }
 
-        //             if (Array.isArray(permArray) && permArray.length > 0) {
-        //                 return permArray.map((perm, idx) => (
-        //                     <Tag color="blue" key={`${perm}-${idx}`}>{perm}</Tag>
-        //                 ));
-        //             }
-        //         } catch {
-        //             console.error('Invalid permission format:', permission);
-        //         }
-        //         return '-';
-        //     }
-        // },
+        },
         {
             title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សកម្មភាព</span>,
             key: "action",
@@ -255,14 +260,14 @@ function RolePage() {
                         rules={[{ required: true, message: "Please input role name" }]}
                     >
                         <Input placeholder="ឈ្មោះតួនាទី" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
-                    </Form.Item> 
+                    </Form.Item>
                     <Form.Item
                         name="permission"
                         label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សិទ្ធិប្រើប្រាស់</span>}
                     >
                         <Select
                             mode="multiple"
-                            allowClear 
+                            allowClear
                             placeholder="ជ្រើសសិទ្ធិ"
                             options={permissionOptions}
                             style={{ width: '100%', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}

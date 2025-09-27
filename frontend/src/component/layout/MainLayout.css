@@ -53,3 +53,11 @@
   font-size: 34px;
   margin-right: 15px;
 }
+
+.ant-menu-item:hover,
+.ant-menu-submenu-title:hover {
+  background-color: #1a73e8 !important;
+  /* Change to desired hover background */
+  color: #ffffff !important;
+  /* Change to desired hover text color */
+}
