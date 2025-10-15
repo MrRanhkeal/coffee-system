@@ -3,9 +3,10 @@ import PropTypes from "prop-types";
 import { request } from '../../../util/helper';
 import { Card, Space, Statistic } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 function DashboardCustomer() {
     const [customers, setCustomers] = useState(0);
-
+    const { t } = useTranslation();
 
     // get customers
     useEffect(() => {
@@ -53,7 +54,7 @@ function DashboardCustomer() {
                         }}
                     />
                 }
-                title={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>អតិថិជន</span>}
+                title={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('dashboard.labels.customers')}</span>}
                 value={customers}
             />
         </Space>

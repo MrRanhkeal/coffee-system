@@ -12,10 +12,10 @@ import { request } from "../../util/helper";
 import { getProfile } from "../../store/profile.store";
 import { FiSearch } from "react-icons/fi";
 import { QRCodeSVG } from "qrcode.react";
-
+import { useTranslation } from "react-i18next";
 function PosPage() {
     const { Text } = Typography;
-
+    const { t } = useTranslation();
     const profile = getProfile();
     const refInvoice = React.useRef(null);
     const pollRef = useRef(null);
@@ -174,14 +174,14 @@ function PosPage() {
         try {
             const res = await request('category', 'get');
             if (res && !res.error && res.list) {
-                // Create category icons mapping
+                //Create category icons mapping
                 const categoryIcons = {
-                    'ភេសជ្ជៈក្ដៅ': '☕',
-                    'ភេសជ្ជៈត្រជាក់': '🍦',
-                    'សូដា': '🥤',
-                    'តែត្រជាក់': '🍵',
+                    'Hot Drink': '☕',
+                    'Could Drink': '🍦',
+                    'Soda': '🥤',
+                    'Ice Tea': '🍵',
                     'Milk': '🥛',
-                };
+                };  
 
                 const categoriesFromBackend = res.list.map(category => ({
                     id: category.id,
@@ -190,7 +190,7 @@ function PosPage() {
                 }));
 
                 setCategories([
-                    { id: "", name: "ទាំងអស់", icon: "🛒" },
+                    { id: "", name: "All", icon: "🛒" },
                     ...categoriesFromBackend
                 ]);
             }
@@ -198,7 +198,7 @@ function PosPage() {
             console.error('Error getting categories:', error);
             // Keep default "All" category if get fails
             setCategories([
-                { id: "", name: "ទាំងអស់", icon: "🛒" }
+                { id: "", name: "All", icon: "🛒" }
             ]);
         }
     }, []);
@@ -542,7 +542,7 @@ function PosPage() {
                         });
                     }, 1000);
 
-                    
+
 
                     if (pollRef.current) clearInterval(pollRef.current);
                     pollRef.current = setInterval(async () => {
@@ -657,7 +657,7 @@ function PosPage() {
                             padding: '2px 6px',
                             borderRadius: 4,
                             fontWeight: 'bold',
-                            fontSize: 20, 
+                            fontSize: 20,
                             color: 'rgba(27, 202, 41, 0.9)',
                         }}>
                             ${objSummary.total.toFixed(2)}
@@ -665,19 +665,19 @@ function PosPage() {
                     </div>
                     <div style={{ marginTop: 8 }}>
                         {qrModal.status === 'paid' ? (
-                            <span style={{ color: 'green', fontWeight: 'bold' }}>Payment successful</span>
+                            <span style={{ color: 'green', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('pos.labels.paymentsuccess')}</span>
                         ) : qrModal.status === 'expired' ? (
-                            <span style={{ color: 'red', fontWeight: 'bold' }}>QR expired</span>
+                            <span style={{ color: 'red', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('pos.labels.qrexpire')}</span>
                         ) : (
-                            <span>
-                                Expires in: {Math.max(0, Math.floor(qrRemainMs / 1000))}s
+                            <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                                {t('pos.labels.expirein')}: {Math.max(0, Math.floor(qrRemainMs / 1000))}{t('pos.labels.second')}
                             </span>
                         )}
                     </div>
                     {qrModal.status === 'pending' && qrModal.md5 && (
                         <div style={{ marginTop: 12 }}>
-                            <Button type="primary" loading={forceLoading} onClick={handleForceComplete}>
-                                Mark as Paid & Print
+                            <Button type="primary" loading={forceLoading} onClick={handleForceComplete} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                                {t('pos.labels.makeassprint')}
                             </Button>
                         </div>
                     )}
@@ -686,7 +686,7 @@ function PosPage() {
                     ) : (
                         <Empty description="Waiting for QR..." />
                     )} */}
-                    
+
 
                     {/* <div style={{ textAlign: 'center' }}>
                         <div style={{ fontWeight: 'bold',fontSize:'16px' }}>Amount: ${objSummary.total.toFixed(2)}</div> 
@@ -722,7 +722,7 @@ function PosPage() {
                             {/* <Typography.Title level={3} style={{ margin: 0 }}>Products</Typography.Title> */}
                             <Flex style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
                                 <Input
-                                    placeholder="ស្វែងរក"
+                                    placeholder={t('common.search')}
                                     prefix={<FiSearch />}
                                     className="khmer-search"
                                     value={filter.txt_search || ""}
@@ -739,7 +739,7 @@ function PosPage() {
                         </Space>
 
                         <div style={{ marginBottom: '1rem' }}>
-                            <Typography.Title level={5} style={{ marginBottom: '1rem', color: '#595959', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ប្រភេទទំនិញ</Typography.Title>
+                            <Typography.Title level={5} style={{ marginBottom: '1rem', color: '#595959', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('pos.labels.categorie')}</Typography.Title>
                             <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: '0.5rem', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
                                 {categories.map((category) => {
                                     {/* const isSelected = String(filter.category_name) === String(category.name); */ }
@@ -798,8 +798,8 @@ function PosPage() {
                                 <Col span={24} style={{ textAlign: 'center', padding: '32px' }}>
                                     <Empty
                                         description={
-                                            <span style={{ color: '#595959' }}>
-                                                No products found
+                                            <span style={{ color: '#595959', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                                                {t('pos.labels.notfound')}
                                             </span>
                                         }
                                     />
@@ -864,5 +864,5 @@ ProductItem.propTypes = {
     final_price: PropTypes.number,
     qty: PropTypes.number,
     handleAdd: PropTypes.func.isRequired,
-};  
+};
 export default PosPage;

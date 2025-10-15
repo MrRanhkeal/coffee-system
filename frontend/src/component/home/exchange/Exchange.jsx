@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Row, Col } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
-
+import { useTranslation } from 'react-i18next';
 function Exchange() {
     const [form] = Form.useForm();
+    const {t} = useTranslation();
     const [KHRValue, setKHRValue] = useState('');
     const [USDValue, setUSDValue] = useState('');
     useEffect(() => {
@@ -87,15 +88,15 @@ function Exchange() {
     };
     return (
         <div style={{minHeight: '20%',width: '100%', background: '#ffffff', padding: 10, borderRadius: 8, boxShadow: '0 2px 8px #b5b1b1ff', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
-            <div style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', fontSize: '24px', alignItems: 'center', justifyContent: 'center', display: 'flex', margin: '0 0 6px 0' }}>អត្រាប្ដូរប្រាក់</div>
+            <div style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', fontSize: '24px', alignItems: 'center', justifyContent: 'center', display: 'flex', margin: '0 0 6px 0' }}>{t('exchange.table.exchange_rate')}</div>
             <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 0 6px 0' }}>
                 <div style={{ marginBottom: '1rem' }}>
-                    <label style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', margin: '0 0 10px 0' }}>ប្រាក់ដុល្លា (USD)</label><br />
+                    <label style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', margin: '0 0 10px 0' }}>{t('exchange.placeholders.usd')}</label><br />
                     <Input
                         style={{ width: '90%', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                         value={USDValue}
                         onChange={handleUSDChange}
-                        placeholder="បញ្ចូលប្រាក់ដុល្លា"
+                        placeholder={t('exchange.table.usd')}
                         className="khmer-search"
                         prefix="$"
                         autoComplete="off"
@@ -103,12 +104,12 @@ function Exchange() {
                     /><b>&nbsp;&nbsp;&nbsp;=</b>
                 </div>
                 <div style={{ marginBottom: '1rem', marginLeft: '10px' }}>
-                    <label style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', margin: '0 0 10px 0' }}>ប្រាក់រៀល (KHR)</label><br />
+                    <label style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', margin: '0 0 10px 0' }}>{t('exchange.placeholders.khr')}</label><br />
                     <Input
                         style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', width: '90%' }}
                         value={KHRValue}
                         onChange={handleKHRChange}
-                        placeholder="បញ្ចូលប្រាក់រៀល"
+                        placeholder={t('exchange.table.khr')}
                         className="khmer-search"
                         suffix="៛"
                         autoComplete="off"
@@ -119,7 +120,7 @@ function Exchange() {
                 <Row justify="space-between">
                     <Col>
                         <Button onClick={handleReset} icon={<ReloadOutlined />} type="default" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
-                            សម្អាត
+                            {t('exchange.table.clear')}
                         </Button>
                     </Col>
                 </Row>

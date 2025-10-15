@@ -2,9 +2,11 @@ import React, { useState,useEffect } from 'react';
 import { GiCoffeeBeans } from "react-icons/gi"; 
 import Stock_CoffeePage from './Stock_CoffeePage';
 import Stock_ProductPage from './Stock_ProductPage';
+import { useTranslation } from 'react-i18next';
 import { GrAppsRounded } from "react-icons/gr";
 function StockPage() {
     const [activeTab, setActiveTab] = useState('coffee');
+    const {t} = useTranslation();
 
     // const buttonStyles = {
     //     normal: {
@@ -28,7 +30,7 @@ function StockPage() {
 
     return (
         <div >
-            <div style={{ fontWeight: 600, fontSize: 18, marginBottom: 16, color: 'rgb(75, 212, 51)' ,fontFamily: 'Khmer OS Muol Light'}}>ប្រភេទស្តុកទំនិញ</div>
+            <div style={{ fontWeight: 600, fontSize: 18, marginBottom: 16, color: 'rgb(75, 212, 51)', fontFamily: 'Khmer OS Muol Light' }}>{t('stock.labels.stocktype')}</div>
             <div style={{ display: 'flex', gap: 16 }}>
                 <button
                     onClick={() => setActiveTab('coffee')}
@@ -40,7 +42,7 @@ function StockPage() {
                     aria-label="Coffee Stock"
                 >
                     <GiCoffeeBeans style={{ fontSize: 44, color: activeTab === 'coffee' ? '#1890ff' : '#222' }} />
-                    <span style={{ marginTop: 8, fontWeight: 500, color: activeTab === 'coffee' ? '#1890ff' : '#222',fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>កាហ្វេ</span>
+                    <span style={{ marginTop: 8, fontWeight: 500, color: activeTab === 'coffee' ? '#1890ff' : '#222',fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('stock.labels.coffee')}</span>
                 </button>
                 <button
                     onClick={() => setActiveTab('product')}
@@ -53,7 +55,7 @@ function StockPage() {
                 >
                 <GrAppsRounded style={{ fontSize: 44, color: activeTab === 'cup' ? '#1890ff' : '#222' }} />
                     {/* <LuCupSoda style={{ fontSize: 44, color: activeTab === 'cup' ? '#1890ff' : '#222' }} /> */}
-                    <span style={{ marginTop: 8, fontWeight: 500, color: activeTab === 'cup' ? '#1890ff' : '#222' ,fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'}}>ទំនិញផ្សេងៗ</span>
+                    <span style={{ marginTop: 8, fontWeight: 500, color: activeTab === 'cup' ? '#1890ff' : '#222' ,fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'}}>{t('stock.labels.others')}</span>
                 </button>
             </div>
             <div style={{ marginTop: 6 }}>

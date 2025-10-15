@@ -2,11 +2,12 @@ import React, { useEffect } from 'react'
 import { request, formatDateClient } from '../../../util/helper'; // Added import for request helper and formatDateClient 
 import { Space, Table } from 'antd';
 import Link from 'antd/es/typography/Link';
+import { useTranslation } from 'react-i18next';
 
 function RecentOrders() {
     const [dataSource, setDataSource] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
-
+    const { t } = useTranslation();
     useEffect(() => {
         const getRecentOrders = async () => {
             setLoading(true);
@@ -33,7 +34,7 @@ function RecentOrders() {
     return (
         <>
             {/* <Typography.Text strong>Recent Orders</Typography.Text> */}
-            <div style={{ fontWeight: 'bold', color: '#833AB4', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', margin: '0 0 10px 0' }}>ការបញ្ជារទំនិញថ្មីៗ</div>
+            <div style={{ fontWeight: 'bold', color: '#833AB4', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', margin: '0 0 10px 0' }}>{t('recentorders.labels.recentorders')}</div>
             <Space style={{ width: '100%', display: "block", overflowX: "auto" }}>
                 <Table style={{ width: 1450, minWidth: 1200, maxWidth: "100%", display: "block", overflowX: "auto" }}
                     columns={[
@@ -51,7 +52,7 @@ function RecentOrders() {
                         // }, 
                         {
                             key: "order_no",
-                            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>លេខបញ្ជារទិញ</span>,
+                            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('recentorders.labels.orderno')}</span>,
                             dataIndex: "order_no",
                             render: (value) => <div style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{value}</div>,
                             // render: (value) => {
@@ -72,7 +73,7 @@ function RecentOrders() {
                         // },
                         {
                             key: "total_amount",
-                            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សរុប</span>,
+                            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('recentorders.labels.total')}</span>,
                             dataIndex: "total_amount",
                             width: '20%',
                             align: 'left',
@@ -83,7 +84,7 @@ function RecentOrders() {
                         },
                         {
                             key: "paid_amount",
-                            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ចំនួនប្រាក់ដែលបានបង់</span>,
+                            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('recentorders.labels.paidamount')}</span>,
                             dataIndex: "paid_amount",
                             width: '20%',
                             align: 'left',
@@ -94,20 +95,20 @@ function RecentOrders() {
                         },
                         {
                             key: "payment_method",
-                            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>វិធីសាស្រ្តការទូទាត់</span>,
+                            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('recentorders.labels.paymentmethod')}</span>,
                             dataIndex: "payment_method",
                             width: '20%',
                             align: 'left'
                         },
                         {
                             key: "create_by",
-                            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>អ្នកលក់</span>,
+                            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('recentorders.labels.cashier')}</span>,
                             dataIndex: "create_by",
                             render: (value) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{value}</span>,
                         },
                         {
                             key: "create_at",
-                            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>កាលបរិច្ឆេទ</span>,
+                            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('recentorders.labels.datetime')}</span>,
                             dataIndex: "create_at",
                             width: '20%',
                             align: 'left',

@@ -6,10 +6,12 @@ import { Button, Form, Input, message, Modal, Select, Space, Table, Tag, } from 
 import { MdDelete, MdEdit } from "react-icons/md";
 import { DeleteOutlined, EditOutlined, EyeOutlined, FileAddFilled } from "@ant-design/icons";
 import { IoMdEye } from "react-icons/io";
+import { useTranslation } from "react-i18next";
 
 function UserPage() {
     const [form] = Form.useForm();
     // const { config } = configStore();
+    const { t } = useTranslation();
     const [list, setList] = useState([]);
     const [roles, setRoles] = useState([]);
     const [state, setState] = useState({
@@ -92,27 +94,65 @@ function UserPage() {
     const clickBtnDelete = async (record) => {
         try {
             Modal.confirm({
-                title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>លុប{record.name}</span>,
-                content: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>តើអ្នកចង់លុប {record.name} មែនទេ ?</span>,
-                okText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>បាទ/ចាស</span>,
+                title: (
+                    <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                        {t('user.confirm.delete_title', { name: record.name })}
+                    </span>
+                ),
+                content: (
+                    <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>
+                        {t('user.confirm.delete_content', { name: record.name })}
+                    </span>
+                ),
+                okText: (
+                    <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>
+                        {t('common.yes')}
+                    </span>
+                ),
                 okType: 'danger',
-                cancelText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#25a331ff' }}>ទេ!</span>,
+                cancelText: (
+                    <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#25a331ff' }}>
+                        {t('common.no')}
+                    </span>
+                ),
                 onOk: async () => {
                     const res = await request(`auth/delete/${record.id}`, "delete");
                     if (res && !res.error) {
-                        message.success("User deleted successfully");
+                        message.success(t('user.confirm.delete_success', { name: record.name }));
                         getList();
                     } else {
-                        message.error(res.message || "Failed to delete user");
+                        message.error(res.message || t('user.confirm.delete_failed', { name: record.name }));
                     }
                 }
-            })
-        }
-        catch (error) {
-            // console.error("Delete error:", error);
-            message.error("Failed to delete user", error);
+            });
+        } catch (error) {
+            message.error(t('user.confirm.delete_failed', { name: record.name }), error);
         }
     };
+    // const clickBtnDelete = async (record) => {
+    //     try {
+    //         Modal.confirm({
+    //             title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('user.confirm_delete', { name: record.name })}</span>,
+    //             content: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>{t('user.confirm_delete_content', { name: record.name })}</span>,
+    //             okText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>{t('common.yes')}</span>,
+    //             okType: 'danger',
+    //             cancelText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#25a331ff' }}>{t('common.no')}</span>,
+    //             onOk: async () => {
+    //                 const res = await request(`auth/delete/${record.id}`, "delete");
+    //                 if (res && !res.error) {
+    //                     message.success("User deleted successfully");
+    //                     getList();
+    //                 } else {
+    //                     message.error(res.message || "Failed to delete user");
+    //                 }
+    //             }
+    //         })
+    //     }
+    //     catch (error) {
+    //         // console.error("Delete error:", error);
+    //         message.error("Failed to delete user", error);
+    //     }
+    // };
 
     const handleCloseModal = () => {
         form.resetFields();
@@ -196,21 +236,21 @@ function UserPage() {
                     onClick={handleOpenModal}
                     allowClear
                 >
-                    <FileAddFilled style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />បញ្ចូលថ្មី
+                    <FileAddFilled style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />{t('common.new')}
                 </Button>
             </div>
-            <div style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold' }}>តារាងអ្នកប្រើប្រាស់</div>
+            <div style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold' }}>{t('user.title')}</div>
             <Modal
                 style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                 open={state.visible}
-                title={state.isReadOnly ? "មើល" : (state.isEdit ? "កែប្រែ" : "បញ្ចូលថ្មី")}
+                title={state.isReadOnly ? t('common.view') : (state.isEdit ? t('common.update') : t('common.new'))}
                 onCancel={handleCloseModal}
                 footer={null}
             >
                 <Form layout="vertical" form={form} onFinish={onFinish}>
                     <Form.Item
                         name={"name"}
-                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ឈ្មោះ</span>}
+                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('user.labels.name')}</span>}
                         rules={[
                             {
                                 required: true,
@@ -218,11 +258,11 @@ function UserPage() {
                             },
                         ]}
                     >
-                        <Input placeholder="សូមបញ្ចូលឈ្មោះ" disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
+                        <Input placeholder={t('user.labels.name')} disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
                     </Form.Item>
                     <Form.Item
                         name={"username"}
-                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>អ៊ីមែល</span>}
+                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('user.labels.username')}</span>}
                         rules={[
                             {
                                 required: true,
@@ -230,20 +270,20 @@ function UserPage() {
                             },
                         ]}
                     >
-                        <Input placeholder="សូមបញ្ចូលអ៊ីមែល" disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
+                        <Input placeholder={t('user.labels.username')} disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
                     </Form.Item>
 
                     <Form.Item
                         name="password"
-                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ពាក្យសម្ងាត់</span>}
+                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('user.labels.password')}</span>}
                         rules={[{ required: true, message: 'សូមបញ្ចូលពាក្យសម្ងាត់!' }]}
                     >
-                        <Input.Password placeholder="សូមបញ្ចូលពាក្យសម្ងាត់" disabled={state.isReadOnly} visibilityToggle className="khmer-search" />
+                        <Input.Password placeholder={t('user.labels.password')} disabled={state.isReadOnly} visibilityToggle className="khmer-search" />
                     </Form.Item>
                     <Form.Item
                         style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                         name={"confirm_password"}
-                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>បញ្ជាក់ពាក្យសម្ងាត់</span>}
+                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('user.labels.confirm_password')}</span>}
                         rules={[
                             {
                                 required: true,
@@ -251,21 +291,21 @@ function UserPage() {
                             },
                         ]}
                     >
-                        <Input.Password placeholder="សូមបញ្ជាក់ពាក្យសម្ងាត់" className="khmer-search" disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
+                        <Input.Password placeholder={t('user.labels.confirm_password')} className="khmer-search" disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
                     </Form.Item>
 
                     <Form.Item
                         name="role_id"
-                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>តួនាទី</span>}
+                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('user.labels.role')}</span>}
                         rules={[
                             {
                                 required: true,
-                                message: "សូមជ្រើសរើសតួនាទី",
+                                message: "fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' + 'សូមជ្រើសរើសតួនាទី'",
                             },
                         ]}
                     >
                         <Select
-                            placeholder="ជ្រើសរើសតួនាទី"
+                            placeholder={t('user.labels.role')}
                             style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                             disabled={state.isReadOnly}
                             options={roles.map(role => ({
@@ -276,17 +316,17 @@ function UserPage() {
                     </Form.Item>
                     <Form.Item
                         name={"is_active"}
-                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ស្ថានភាព</span>}
+                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('user.labels.status')}</span>}
                         rules={[
                             {
                                 required: true,
-                                message: "Please select status",
+                                message: 'fontFamily: "Noto Sans Khmer, Roboto, sans-serif" + "សូមជ្រើសរើសស្ថានភាព',
                             },
                         ]}
                     >
                         <Select
                             style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
-                            placeholder="ជ្រើសរើសស្ថានភាព"
+                            placeholder={t('user.labels.status')}
                             disabled={state.isReadOnly}
                             options={[
                                 {
@@ -304,10 +344,10 @@ function UserPage() {
                     </Form.Item>
                     <Form.Item style={{ textAlign: "right" }}>
                         <Space>
-                            <Button onClick={handleCloseModal} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{state.isReadOnly ? 'បិទ' : 'បោះបង់'}</Button>
+                            <Button onClick={handleCloseModal} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{state.isReadOnly ? t('common.close') : t('common.cancel')}</Button>
                             {!state.isReadOnly && (
                                 <Button type="primary" htmlType="submit" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
-                                    {state.isEdit ? 'កែប្រែ' : 'រក្សាទុក'}
+                                    {state.isEdit ? t('common.update') : t('common.save')}
                                 </Button>
                             )}
                         </Space>
@@ -321,47 +361,47 @@ function UserPage() {
                 columns={[
                     {
                         key: "no",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ល.រ</span>,
+                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('common.number')}</span>,
                         render: (value, data, index) => index + 1,
                     },
                     {
                         key: "name",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ឈ្មោះ</span>,
+                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('user.labels.name')}</span>,
                         dataIndex: "name",
                         render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
                     },
                     {
                         key: "username",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ឈ្មោះអ្នកប្រើ</span>,
+                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('user.labels.username')}</span>,
                         dataIndex: "username",
                         render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
                     },
                     {
                         key: "role_name",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ឈ្មោះតួនាទី</span>,
+                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('user.labels.role')}</span>,
                         dataIndex: "role_name",
                         render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
                     },
                     {
                         key: "is_active",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ស្ថានភាព</span>,
+                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('common.status')}</span>,
                         dataIndex: "is_active",
                         render: (value) =>
                             value ? (
-                                <Tag color="green" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សកម្ម</Tag>
+                                <Tag color="green" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('common.active')}</Tag>
                             ) : (
-                                <Tag color="red" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>អសកម្ម</Tag>
+                                <Tag color="red" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('common.inactive')}</Tag>
                             ),
                     },
                     {
                         key: "create_by",
-                        title: "Create By",
+                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('user.labels.create_by')}</span>,
                         dataIndex: "create_by",
                         render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
                     },
                     {
                         key: "action",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សកម្មភាព</span>,
+                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('common.action')}</span>,
                         align: "center",
                         render: (value, data) => (
                             <Space>

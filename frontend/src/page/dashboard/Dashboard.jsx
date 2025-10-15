@@ -11,11 +11,12 @@ import RecentOrders from '../../component/home/recentorder/RecentOrders';
 import Calendar from '../../component/home/calendar/Calendar'; 
 import SaleSummaryChart from '../report/SaleSummaryChart';
 import SaleSummaryPieChart from '../report/SaleSummaryPieChart';
-
+import { useTranslation } from 'react-i18next';
 function Dashboard() {
+    const { t } = useTranslation();
     return (
         <Space size={20} direction='vertical'>
-            <Typography.Title level={4} style={{fontWeight: 'bold',fontSize: '30px',color:'#2A7B9B',fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'}}>ទិដ្ឋិភាពទូទៅ</Typography.Title>
+            <Typography.Title level={4} style={{ fontWeight: 'bold', fontSize: '30px', color: '#2A7B9B', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('dashboard.labels.orverviews')}</Typography.Title>
             <Space direction='horizontal'> 
                 <DashboardProduct/>
                 <DashboardCategory/>

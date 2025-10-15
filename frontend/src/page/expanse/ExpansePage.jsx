@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button, Form, Input, InputNumber, message, Modal, Select, Space, Table } from "antd";
-import { request } from "../../util/helper";
+import { request, formatDateClient } from "../../util/helper";
 import { MdDelete, MdEdit } from "react-icons/md";
 import MainPage from "../../component/layout/MainPage";
 import { DeleteOutlined, EditOutlined, EyeOutlined, FileAddOutlined } from "@ant-design/icons";
 import { IoMdEye } from "react-icons/io";
 import { configStore } from "../../store/configStore";
+import { useTranslation } from "react-i18next";
 import Link from "antd/es/typography/Link";
 import { MdCalendarMonth } from "react-icons/md";
 import { FaCalendarWeek } from "react-icons/fa6";
@@ -14,6 +15,7 @@ import { LiaCalendarWeekSolid } from "react-icons/lia";
 import { FiSearch } from "react-icons/fi";
 import './ex.css'
 function ExpansePage() {
+  const {t} = useTranslation();
   const [formRef] = Form.useForm();
   const [list, setList] = useState([]);
   const { config } = configStore();
@@ -189,11 +191,11 @@ function ExpansePage() {
   };
   const onClickDelete = async (data) => {
     Modal.confirm({
-      title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>លុប{data.expense_type}</span>,
-      content: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>តើអ្នកចង់លុប {data.expense_type} មែនទេ ?</span>,
-      okText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>បាទ/ចាស</span>,
+      title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.confirm.delete_title', { name: data.expense_type })}</span>,
+      content: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>{t('expense.confirm.delete_content', { name: data.expense_type })}</span>,
+      okText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>{t('common.yes')}</span>,
       okType: 'danger',
-      cancelText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#25a331ff' }}>ទេ!</span>,
+      cancelText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#25a331ff' }}>{t('common.no')}</span>,
       icon: <MdDelete style={{ color: "red", fontSize: 20 }} />,
       onOk: async () => {
         const res = await request('expense', 'delete', { id: data.id });
@@ -210,7 +212,7 @@ function ExpansePage() {
       <div className="pageHeader">
         <Space>
           <Input
-            placeholder="ស្វែងរក"
+            placeholder={t('common.search')}
             prefix={<FiSearch />}
             className="khmer-search"
             value={state.txtSearch || ""}
@@ -248,12 +250,12 @@ function ExpansePage() {
           onClick={openModal}
           style={{ padding: "10px", marginBottom: "10px", marginLeft: "auto", fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
         >
-          <FileAddOutlined style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />បញ្ចូលថ្មី
+          <FileAddOutlined style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} /> {t('common.new')}
         </Button>
       </div>
-      <div style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>តារាងនៃការចំណាយ</div>
+      <div style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.title')}</div>
       <div style={{ margin: '20px 0', padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
-        <h3 style={{ marginBottom: 16, color: '#d32a2aff', fontSize: 20, fontWeight: 'bold', fontFamily: 'Khmer OS Muol Light' }}>ការចំណាយ</h3>
+        <h3 style={{ marginBottom: 16, color: '#d32a2aff', fontSize: 20, fontWeight: 'bold', fontFamily: 'Khmer OS Muol Light' }}>{t('expense.labels.name')}</h3>
         {/* Extract values safely from arrays/objects */}
         {(() => {
           const thisMonthValue = Array.isArray(expense_this_month) && expense_this_month.length > 0
@@ -272,22 +274,22 @@ function ExpansePage() {
             <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <div style={{ margin: '10px', color: '#0c3e6b', backgroundColor: '#e4eae2ff', borderRadius: 6, fontSize: 20, padding: 18, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', fontWeight: 'bold', textAlign: 'center' }}>
                 <FaCalendarWeek />
-                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ការចំណាយខែកន្លងទៅ&nbsp;</b>
+                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.labels.lastmonth')}&nbsp;</b>
                 <span style={{ color: '#da2016ff', fontWeight: 'bold' }}>${Number(lastMonthValue).toFixed(2)}</span>
               </div>
               <div style={{ margin: '10px', color: '#0c3e6b', backgroundColor: '#e6ece4ff', borderRadius: 6, fontSize: 20, padding: 18, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', fontWeight: 'bold', textAlign: 'center' }}>
                 <MdCalendarMonth style={{ justifyContent: 'center', alignItems: 'center' }} />
-                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ការចំណាយខែនេះ&nbsp;</b>
+                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.labels.thismonth')}&nbsp;</b>
                 <span style={{ color: '#da2016ff', fontWeight: 'bold' }}>${Number(thisMonthValue).toFixed(2)}</span>
               </div>
               <div style={{ margin: '10px', color: '#0c3e6b', backgroundColor: '#e2e8ecff', borderRadius: 6, fontSize: 20, padding: 18, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', fontWeight: 'bold', textAlign: 'center' }}>
                 <LiaCalendarWeekSolid />
-                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ការចំណាយឆ្នាំនេះ&nbsp;</b>
+                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.labels.thisyear')}&nbsp;</b>
                 <span style={{ color: '#da2016ff', fontWeight: 'bold' }}>${Number(thisYearValue).toFixed(2)}</span>
               </div>
               <div style={{ margin: '10px', color: '#0c3e6b', backgroundColor: '#e1e6eaff', borderRadius: 6, fontSize: 20, padding: 18, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', fontWeight: 'bold', textAlign: 'center' }}>
                 <BiCalendarWeek />
-                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ការចំណាយសរុប&nbsp;</b>
+                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.labels.totalexpense')}&nbsp;</b>
                 <span style={{ color: '#da2016ff', fontWeight: 'bold' }}>${Number(totalExpenseValue).toFixed(2)}</span>
               </div>
             </div>
@@ -297,7 +299,7 @@ function ExpansePage() {
       <Modal
         style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
         open={state.visibleModal}
-        title={state.isReadOnly ? "មើល" : (state.id ? "កែប្រែ" : "បញ្ចូលថ្មី")}
+        title={state.isReadOnly ? t('common.view') : (state.id ? t('common.update') : t('common.new'))}
         footer={null}
         onCancel={onCloseModal}
       >
@@ -308,7 +310,7 @@ function ExpansePage() {
         >
           <Form.Item
             name={"expense_type"}
-            label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ប្រភេទនៃការចំណាយ</span>}
+            label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.labels.expensetype')}</span>}
             rules={[
               {
                 required: true,
@@ -318,7 +320,7 @@ function ExpansePage() {
           >
             <Select
               style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
-              placeholder="ជ្រើសរើស ប្រភេទនៃការចំណាយ"
+              placeholder={t('expense.labels.expensetype')}
               showSearch
               allowClear
               options={config.expense_type?.map((opt) => ({
@@ -343,7 +345,7 @@ function ExpansePage() {
               disabled={state.isReadOnly}
             />
           </Form.Item>
-          <Form.Item name={"amount"} label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ចំនួន</span>} rules={[{ required: true, message: 'សូមបញ្ចូល ចំនួន!' }]}>
+          <Form.Item name={"amount"} label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.labels.amount')}</span>} rules={[{ required: true, message: 'សូមបញ្ចូល ចំនួន!' }]}>
             <InputNumber
               min={0}
               style={{ width: '100%' }}
@@ -355,7 +357,7 @@ function ExpansePage() {
           </Form.Item>
           <Form.Item
             name={"vendor_payee"}
-            label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>អ្នកលក់/អ្នកទទួល</span>}
+            label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.labels.vendorpayee')}</span>}
             rules={[
               {
                 required: true,
@@ -365,7 +367,7 @@ function ExpansePage() {
           >
             <Select
               style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
-              placeholder="ជ្រើសរើស អ្នកលក់/អ្នកទទួល"
+              placeholder={t('expense.labels.vendorpayee')}
               showSearch
               allowClear
               options={config.vendor_payee?.map((opt) => ({
@@ -391,7 +393,7 @@ function ExpansePage() {
           </Form.Item>
           <Form.Item
             name={"payment_method"}
-            label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ការទូទាត់</span>}
+            label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.labels.paymentmethod')}</span>}
             rules={[
               {
                 required: true,
@@ -401,7 +403,7 @@ function ExpansePage() {
           >
             <Select
               style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
-              placeholder="ជ្រើសរើស ការទូទាត់"
+              placeholder={t('expense.labels.paymentmethod')}
               showSearch
               allowClear
               options={config.payment_method?.map((opt) => ({
@@ -425,17 +427,17 @@ function ExpansePage() {
               }}
               disabled={state.isReadOnly} />
           </Form.Item>
-          <Form.Item name={"description"} label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ពណ៌នា</span>} rules={[{ required: true, message: 'សូមបញ្ចូល ពណ៌នា!' }]}>
-            <Input.TextArea placeholder="ពណ៌នា" disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
+          <Form.Item name={"description"} label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.labels.description')}</span>} rules={[{ required: true, message: 'សូមបញ្ចូល ពណ៌នា!' }]}>
+            <Input.TextArea placeholder={t('expense.labels.description')} disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
           </Form.Item>
           {/* <Form.Item name={"expense_date"} label="Expense Date" rules={[{ required: true, message: 'Please input expense date!' }]}>
             <Input type="date" placeholder="Expense Date" disabled={state.isReadOnly} />
           </Form.Item> */}
           <Form.Item style={{ textAlign: "right" }}>
-            <Button onClick={onCloseModal} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{state.isReadOnly ? "បិទ" : "បោះបង់"}</Button> &nbsp;
+            <Button onClick={onCloseModal} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{state.isReadOnly ? t('common.close') : t('common.cancel')}</Button> &nbsp;
             {!state.isReadOnly && (
               <Button type="primary" htmlType="submit" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
-                {formRef.getFieldValue("id") ? "កែប្រែ" : "រក្សាទុក"}
+                {formRef.getFieldValue("id") ? t('common.update') : t('common.save')}
               </Button>
             )}
           </Form.Item>
@@ -450,18 +452,21 @@ function ExpansePage() {
           //   render: (item, data, index) => index + 1,
           // },
           {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>លេខកូដ</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.table.no')}</span>,
             dataIndex: "id",
             key: "id",
-            render: (item, data, index) => (
-              <Link style={{ color: '#cc2121ff', fontSize: "14px" }}>
-                {'EXP-' + String(index + 1).padStart(3, '0')}
-              </Link>
-            )
+            render: (item, data, index) => {
+              const total = list.length; // Replace with actual data length
+              return (
+                <Link style={{ color: '#cc2121ff', fontSize: "14px" }}>
+                  {'EXP-' + String(total - index).padStart(3, '0')}
+                </Link>
+              );
+            }
           },
           {
             key: "expense_type",
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ប្រភេទនៃការចំណាយ</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.table.expensetype')}</span>,
             dataIndex: "expense_type",
             render: (expense_type) => {
               return <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{expense_type}</span>;
@@ -469,7 +474,7 @@ function ExpansePage() {
           },
           {
             key: "vendor_payee",
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>អ្នកលក់/អ្នកទទួល</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.table.vendorpayee')}</span>,
             dataIndex: "vendor_payee",
             render: (vendor_payee) => {
               return <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{vendor_payee}</span>;
@@ -477,13 +482,13 @@ function ExpansePage() {
           },
           {
             key: "amount",
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ចំនួន</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.table.amount')}</span>,
             dataIndex: "amount",
             render: (amount) => '$' + amount
           },
           {
             key: "payment_method",
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ការទូទាត់</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.table.paymentmethod')}</span>,
             dataIndex: "payment_method",
             render: (payment_method) => {
               return <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{payment_method}</span>;
@@ -491,7 +496,7 @@ function ExpansePage() {
           },
           {
             key: "description",
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ពណ៌នា</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.table.description')}</span>,
             dataIndex: "description",
             render: (description) => {
               return <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{description}</span>;
@@ -499,14 +504,17 @@ function ExpansePage() {
           },
           {
             key: "expense_date",
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ថ្ងៃ/ខែ/ឆ្នាំនៃការចំណាយ</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.table.expense_date')}</span>,
             dataIndex: "expense_date",
-            render: (date) => new Date(date).toLocaleDateString("en-GB", { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-            //render: (date) => new Date(date).toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+            render: (date) => (
+              <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                {formatDateClient(date)}
+              </span>
+            ),
           },
           {
             key: "create_by",
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>អ្នកគ្រប់គ្រង</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.table.created_by')}</span>,
             dataIndex: "create_by",
             render: (create_by) => {
               return <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{create_by}</span>;
@@ -514,7 +522,7 @@ function ExpansePage() {
           },
           {
             key: "Action",
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សកម្មភាព</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('expense.table.action')}</span>,
             align: "center",
             render: (item, data, index) => (
               <Space>

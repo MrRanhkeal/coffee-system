@@ -61,3 +61,6 @@
   color: #ffffff !important;
   /* Change to desired hover text color */
 }
+.ant-dropdown-menu {
+  font-family: 'YourCustomFont', sans-serif;
+}

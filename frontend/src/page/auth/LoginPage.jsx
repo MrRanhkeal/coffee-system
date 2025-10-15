@@ -9,28 +9,30 @@ import { FcBusinessman } from "react-icons/fc";
 // import "./LoginPage.css";
 import backgroundImage from '../../assets/coffee_Image_backgorund.png';
 import './LoginPage.css';
+import { useTranslation } from "react-i18next";
 function LoginPage() { 
   const [showPassword, setShowPassword] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const onLogin = async (values) => {
     try {
       const res = await request("auth/login", "post", values);
       if (res && res.error) {
-        message.error(res.error?.message || "Login failed. Please try again.");
+        message.error(res.error?.message || t('login.failed'));
 
       } else if (res && res.access_token) {
         setAcccessToken(res.access_token);
         setProfile(JSON.stringify(res.profile));
         setPermission(res.permission);
-        message.success("Login ជោគជ័យ!");
+        message.success(t('login.success'));
         navigate("/");
       } else {
-        message.error("An unknown error occurred.");
+        message.error(t('login.error'));
       }
     } catch (err) {
       console.error("Login error:", err);
-      message.error("An unexpected error occurred. Please try again.");
+      message.error(t('login.error'));
     }
   };
   useEffect(() => {
@@ -54,21 +56,22 @@ function LoginPage() {
       >
         <h2 
           style={{
-            color: "#080808ff",
+            color: "#12CC60",
             fontSize: "40px",
             fontWeight: "bold",
             textAlign: "center",
             margin: "0 0 20px 0",
+            fontFamily: "Noto Sans Khmer, Roboto, sans-serif",
           }}
         > 
-          LOGIN
+          {t('login.titles')}
         </h2>
 
         {/* Username */}
         <Form.Item
           name="username"
           type="email"
-          rules={[{ required: true, message: "សូមបញ្ចូលអុីម៉ែលអ្នកប្រើប្រាស់ !" }]}
+          rules={[{ required: true, message: t('validation.username_required') }]}
         >
           <div className="input-field" type='email'>
             <i>
@@ -92,13 +95,13 @@ function LoginPage() {
                 color: "#080808ff",
               }}
             >
-              ឈ្មោះអ្នកប្រើ
+              {t('login.username')}
             </label>
           </div>
         </Form.Item>
         <Form.Item
           name="password"
-          rules={[{ required: true, message: "សូមបញ្ចូលពាក្យសម្ងាត់ !" }]}
+          rules={[{ required: true, message: t('validation.password_required') }]}
         >
           <div className="input-field" style={{ position: "relative" }}>
             <i>
@@ -123,7 +126,7 @@ function LoginPage() {
                 color: "#080808ff",
               }}
             >
-              ពាក្យសម្ងាត់
+              {t('login.password')}
             </label> 
             {/* Toggle eye icon */}
             <span
@@ -174,30 +177,26 @@ function LoginPage() {
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <div className="check-box">
                 <input type="checkbox" />
-                <span>Remember me</span>
+                <span style={{fontFamily: "Noto Sans Khmer, Roboto, sans-serif", color: "#080808ff"}}>{t('login.remember')}</span>
               </div>
             </Form.Item>
           </div>
         </Form.Item>
 
         {/* Submit */}
-        <Form.Item>
+        <Form.Item style={{ width: '50%', justifyContent: 'center',  margin: '0 auto'}}>
           <button className="login-title"
             type="submit"
-            // style={{
-            //   backgroundColor: "#61E786",
-            //   padding: "10px 20px",
-            //   borderRadius: "8px",
-            //   border: "none",
-            //   fontWeight: "bold",
-            // }}
+            style={{fontFamily: "Noto Sans Khmer, Roboto, sans-serif"}} 
           >
-            <LoginOutlined style={{ marginRight: "8px" }} />
-            LOGIN
+            <LoginOutlined 
+            style={{ marginRight: "8px" }}  
+            />
+            {t('login.submit')}
           </button>
         </Form.Item>
       </Form>
-    </div>
+    </div>  
   );
 }
 

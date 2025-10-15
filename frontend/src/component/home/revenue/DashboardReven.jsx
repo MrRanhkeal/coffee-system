@@ -3,9 +3,10 @@ import PropTypes from "prop-types";
 import { request } from '../../../util/helper';
 import { Card, Space, Statistic } from 'antd';
 import { DollarCircleFilled } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 function DashboardReven() {
     const [revenue, setRevenue] = useState(0);
-
+    const { t } = useTranslation();
     // Calculate total revenue from orders
     useEffect(() => {
         const getRevenue = async () => {
@@ -54,7 +55,7 @@ function DashboardReven() {
                         }}
                     />
                 }
-                title={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ប្រាក់ចំណូលសរុប</span>}
+                title={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('dashboard.labels.revenues')}</span>}
                 value={revenue}
             />
         </Space>

@@ -4,14 +4,13 @@ import PropTypes from 'prop-types';
 // import styled, { keyframes } from 'styled-components'; 
 import BillItem from '../BillItem';
 // Removed static QR placeholder; dynamic KHQR will be generated at checkout
-
+import { useTranslation } from 'react-i18next';
 // Define the keyframes
 const redPulse = {
     animation: 'redPulse 1.5s infinite',
     fontSize: '14px',
     color: '#666'
 };
-
 // Add keyframes for redPulse animation in a style tag
 const RedPulseKeyframes = () => (
     <style>
@@ -35,6 +34,7 @@ function CartView({
     handleRemove,
     handleClickOut
 }) {
+    const { t } = useTranslation();
     const baseHeight = 650;
     const itemHeight = 56;
     const maxHeight = Math.max(baseHeight, 260 + state.cart_list.length * itemHeight);
@@ -77,8 +77,8 @@ function CartView({
                     alignItems: 'center',
                     marginBottom: '2px'
                 }}>
-                    <h2 style={{ fontWeight: 'bold', fontSize: '20px', margin: 0 }}>
-                        Cart <span style={{ fontWeight: 'normal', fontSize: '16px' }}>({state.cart_list.length})</span>
+                    <h2 style={{ fontWeight: 'bold', fontSize: '20px', margin: 0, fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'}}>
+                        {t('cart.labels.cart')} <span style={{ fontWeight: 'normal', fontSize: '16px' }}>({state.cart_list.length})</span>
                     </h2>
                     {state.cart_list.length > 0 && (
                         <Button
@@ -88,7 +88,7 @@ function CartView({
                             style={{ marginLeft: '8px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
 
                         >
-                            សម្អាត
+                            {t('cart.labels.clear')}
                         </Button>
                     )}
                 </div>
@@ -97,8 +97,8 @@ function CartView({
                         <Empty
                             image={Empty.PRESENTED_IMAGE_SIMPLE}
                             description={
-                                <span style={{ color: '#595959', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '16px',fontWeight:'bold' }}>
-                                    ទទេ
+                                <span style={{ color: '#595959', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '16px', fontWeight: 'bold' }}>
+                                    {t('cart.labels.emty')}
                                 </span>
                             }
                         />
@@ -116,15 +116,15 @@ function CartView({
                 </div>
                 <div style={{ borderTop: '1px solid #eee', paddingTop: '12px', marginBottom: '16px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                        <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ប្រាក់សរុប</span>
+                        <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('cart.labels.totalamoun')}</span>
                         <span>${objSummary.sub_total.toFixed(2)}</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                        <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ចំនួន</span>
-                        <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{objSummary.total_qty} Items</span>
+                        <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('cart.labels.qty')}</span>
+                        <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{objSummary.total_qty} {t('cart.labels.items')}</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                        <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ប្រាក់បញ្ចុះតម្លៃ</span>
+                        <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('cart.labels.discount')}</span>
                         <span>${objSummary.save_discount.toFixed(2)}</span>
                     </div>
                     <div style={{
@@ -134,18 +134,18 @@ function CartView({
                         fontSize: '16px',
                         color: '#090d11ff'
                     }}>
-                        <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold' }}>សរុប</span>
+                        <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold' }}>{t('cart.labels.total')}</span>
                         <span>${objSummary.total.toFixed(2)}</span>
                     </div>
                 </div>
                 <div>
                     <div style={{ marginBottom: '1rem' }}>
-                        <label style={{ fontWeight: 'bold', marginBottom: '4px', display: 'block', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>អតិថិជន</label>
+                        <label style={{ fontWeight: 'bold', marginBottom: '4px', display: 'block', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('cart.labels.customer')}</label>
                         <Select
                             style={{ width: '100%', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                             //isRequired:false
                             value={objSummary.customer_id || undefined}
-                            placeholder="ជ្រើសរើសអតិថិជន"
+                            placeholder={t('cart.placeholders.customer')}
                             onChange={(value) => setObjSummary(prev => ({
                                 ...prev,
                                 customer_id: value || undefined
@@ -158,14 +158,15 @@ function CartView({
                         />
                     </div>
                     <div style={{ marginBottom: '1rem' }}>
-                        <label style={{ fontWeight: 'bold', marginBottom: '4px', display: 'block', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>វិធីសាស្រ្តបង់ប្រាក់</label>
+                        <label style={{ fontWeight: 'bold', marginBottom: '4px', display: 'block', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('cart.labels.paymentmethod')}</label>
                         <Select
                             style={{ width: '100%', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                             value={objSummary.payment_method || undefined}
-                            placeholder="ជ្រើសរើសវិធីបង់ប្រាក់"
+                            placeholder={t('cart.placeholders.paymentmethod')}
                             onChange={(value) => setObjSummary(prev => ({ ...prev, payment_method: value }))}
                             options={[
-                                { value: 'Cash', label: 'សាច់ប្រាក់', style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' } },
+                                // { value: 'Cash', label: 'សាច់ប្រាក់', style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' } },
+                                { value: 'Cash', label: t('cart.labels.cash'), style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' } },
                                 { value: 'QR', label: 'QR Code', style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' } },
                             ]}
                         />
@@ -183,17 +184,17 @@ function CartView({
                             }}>
                                 <div style={{ textAlign: 'left' }}>
                                     <div style={{ ...redPulse, fontSize: '16px', fontWeight: 'bold', margin: '0 8px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
-                                        ចំនួនសរុប: ${objSummary.total.toFixed(2)}
+                                        {t('cart.labels.total')}: ${objSummary.total.toFixed(2)}
                                     </div>
                                     <div style={{ fontSize: '14px', margin: '8px', color: '#666', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
-                                        សូមចុច &quot;Checkout&quot; ដើម្បីបទូទាត់ប្រាក់តាម KHQR
+                                        {t('cart.labels.click')} &quot;Checkout&quot; {t('cart.labels.qrpay')}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     )}
                     <div style={{ marginBottom: '1rem' }}>
-                        <label style={{ fontWeight: 'bold', marginBottom: '4px', display: 'block', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ចំណាំ</label>
+                        <label style={{ fontWeight: 'bold', marginBottom: '4px', display: 'block', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('cart.labels.remark')}</label>
                         <Input.TextArea
                             value={objSummary.remark}
                             onChange={(e) => setObjSummary(prev => ({ ...prev, remark: e.target.value }))}
@@ -203,10 +204,10 @@ function CartView({
                     </div>
                     <div style={{ marginBottom: '1rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <label style={{ fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ចំនួនប្រាក់ដែលបានបង់</label>
+                            <label style={{ fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('cart.labels.paidamount')}</label>
                             {paidInUSD < objSummary.total && (
                                 <span style={{ color: 'red', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
-                                    ចំនួនប្រាក់ដែលត្រូវបង់ (${(objSummary.total - paidInUSD).toFixed(2)} បន្ថែមទៀត)
+                                    {t('cart.labels.neededamount')} (${(objSummary.total - paidInUSD).toFixed(2)} {t('cart.labels.more')})
                                 </span>
                             )}
                         </div>
@@ -223,7 +224,7 @@ function CartView({
                         </div>
                     </div>
                     <div>
-                        <label style={{ fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ប្រាក់បង់ត្រលប់</label>
+                        <label style={{ fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('cart.labels.payback')}</label>
                         <Input
                             style={{ width: '100%' }}
                             value={`$ ${(objSummary.total_paid - objSummary.total).toFixed(2)}`}
@@ -263,5 +264,5 @@ CartView.propTypes = {
     handleDescrease: PropTypes.func.isRequired,
     handleRemove: PropTypes.func.isRequired,
     handleClickOut: PropTypes.func.isRequired
-}; 
+};
 export default CartView

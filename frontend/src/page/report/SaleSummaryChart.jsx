@@ -1,7 +1,7 @@
 import { Chart } from 'react-google-charts';
 import { useEffect, useState } from 'react';
 import { request } from '../../util/helper';
-
+import { useTranslation } from 'react-i18next';
 const months = [
   { key: 'Jan 2025', dataIndex: 'jan' },
   { key: 'Feb 2025', dataIndex: 'feb' },
@@ -27,7 +27,7 @@ const parseCurrency = (value) => {
 
 export default function SaleSummaryChart() {
   const [saleSummaryByMonth, setSaleSummaryByMonth] = useState([{}]);
-
+const { t } = useTranslation();
   useEffect(() => {
     async function getData() {
       const res = await request('report/get_sale_summary', 'get');
@@ -47,7 +47,7 @@ export default function SaleSummaryChart() {
         width="1000px"
         height="400px"
         chartType="ColumnChart"
-        loader={<div>Loading Chart...</div>}
+        loader={<div>{t('report.labels.loadingchart')}</div>}
         data={[
           ['Month', 'Total Cost', 'Total test amount'],
           ...months

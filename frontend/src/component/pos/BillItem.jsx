@@ -3,8 +3,10 @@ import { Button, Image } from 'antd';
 import PropTypes from 'prop-types';
 import styles from './BillItem.module.css';
 import { Config } from '../../util/config';
+import { useTranslation } from 'react-i18next';
 
 function BillItem({ item, handleIncrease, handleDescrease, handleRemove }) {
+    const {t} = useTranslation();
     const itemTotal = item.price * item.cart_qty;
     const discountAmount = item.discount ? (itemTotal * item.discount) / 100 : 0;
     const finalPrice = itemTotal - discountAmount;
@@ -25,7 +27,7 @@ function BillItem({ item, handleIncrease, handleDescrease, handleRemove }) {
                 <div className={styles.itemName} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{item.name}</div>
                 {item.sugarLevel && (
                     <div className={styles.sugarLevel} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
-                        ជាតិស្ករ: {item.sugarLevel + '%'}
+                        {t('billItem.labels.sugarlevel')}: {item.sugarLevel + '%'}
                     </div>
                 )}
                 <div className={styles.itemPrice}>

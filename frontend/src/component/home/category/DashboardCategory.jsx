@@ -4,10 +4,11 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from "prop-types";
 import { request } from '../../../util/helper';
 import Statistic from 'antd/es/statistic/Statistic';
+import { useTranslation } from 'react-i18next';
 
 function DashboardCategory() {
     const [category, setCategory] = useState(0);
-
+    const { t } = useTranslation();
     // get category count
     useEffect(() => {
         const getCategories = async () => {
@@ -52,7 +53,7 @@ function DashboardCategory() {
                         }}
                     />
                 }
-                title={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ប្រភេទ</span>}
+                title={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('dashboard.labels.categories')}</span>}
                 value={category}
             />
         </Space>

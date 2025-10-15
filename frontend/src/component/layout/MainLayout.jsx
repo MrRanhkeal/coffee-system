@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { AlignCenterOutlined,AppstoreOutlined,DollarOutlined,HomeOutlined,SettingOutlined,ShopOutlined,ShoppingCartOutlined,SlidersOutlined, 
-TransactionOutlined, AppstoreAddOutlined, UsergroupAddOutlined, UserOutlined, UserSwitchOutlined} from "@ant-design/icons";
-import { BsPeople,BsCurrencyExchange } from "react-icons/bs";
+import {
+  AlignCenterOutlined, AppstoreOutlined, DollarOutlined, HomeOutlined, SettingOutlined, ShopOutlined, ShoppingCartOutlined, SlidersOutlined,
+  TransactionOutlined, AppstoreAddOutlined, UsergroupAddOutlined, UserOutlined, UserSwitchOutlined
+} from "@ant-design/icons";
+import { BsPeople, BsCurrencyExchange } from "react-icons/bs";
 import { BiLogOutCircle } from "react-icons/bi";
 import { Dropdown, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -11,152 +13,19 @@ import "./MainLayout.css";
 import Logo from "../../assets/v-friends.jpg";
 import ImgUser from "../../assets/admin.jpg";
 import { IoIosNotifications } from "react-icons/io";
-import { MdOutlineMarkEmailUnread } from "react-icons/md"; 
+import { MdOutlineMarkEmailUnread } from "react-icons/md";
 import { getPermission, getProfile, setAcccessToken, setProfile, setPermission } from "../../store/profile.store";
 import { request } from "../../util/helper";
 import { configStore } from "../../store/configStore";
+import { useTranslation } from "react-i18next";
+import { GrLanguage } from "react-icons/gr";
 // import { icons } from "antd/es/image/PreviewGroup";
 const { Content, Sider } = Layout;
 
-const items_menu = [
-  {
-    key: "",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '16px', fontWeight: 'bold' },
-    label: "ទំព័រដើម",
-    children: null,
-    icon: <HomeOutlined />
-  },
-  {
-    key: "pos",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-    label: "កាលក់",
-    children: null,
-    icon: <ShopOutlined />
-  },
-  {
-    label: "ទំនិញ",
-    key: "product",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px',fontWeight:'bold' },
-    children: null,
-    icon: <AppstoreOutlined />
-  },
-  {
-    key: "category",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-    label: "ប្រភេទទំនិញ",
-    children: null,
-    icon: <AppstoreAddOutlined />
-  },
-  {
-    key: "customer",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-    label: "អតិថិជន",
-    children: null,
-    icon: <UsergroupAddOutlined />
-  },
-  {
-    key: "order",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-    label: "ការបញ្ចារទិញ",
-    children: null,
-    icon: <ShoppingCartOutlined />
-  },
-  {
-    key: "supplier",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-    label: "អ្នកផ្គត់ផ្គង់",
-    children: null,
-    icon: <UserSwitchOutlined /> 
-  },
-  {
-    label: "ការចំណាយ",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-    children: [
-      {
-        key: "expanse",
-        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-        label: "ការចំណាយ",
-        children: null,
-        icon: <DollarOutlined />
-      },
-    ],
-    icon: <TransactionOutlined />
-  },
-  {
-    label: "ស្តុក",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-    children: [
-      {
-        key: "stock",
-        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-        label: "ស្តុកកាហ្វេ",
-        children: null,
-        icon: "💹" ,
-      }, 
-    ],
-    icon: <SlidersOutlined />
-  },
-  {
-    label: "របាយការណ៍",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-    children: [ 
-      {
-        key: "getsalereport",
-        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-        label: "របាយការណ៍នៃការលក់",
-        children: null, 
-        icon: <TbReportAnalytics />
-      },
-      {
-        key: "get_sale_summary",
-        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-        label: "របាយការណ៍លំអិតការលក់",
-        children: null,
-        icon: <AlignCenterOutlined />
-      }
-    ], 
-    icon: <MdOutlineLibraryBooks />
-  },
-
-  {
-    label: "អ្នកប្រើប្រាស់ទូទៅ",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-    children: [
-      {
-        key: "user",
-        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-        label: "អ្នកប្រើប្រាស់",
-        children: null,
-        icon: <BsPeople />
-      },
-      {
-        key: "role",
-        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-        label: "សិទ្ធិប្រើប្រាស់",
-        children: null,
-        icon: <UserOutlined />
-      }
-    ],
-    icon: <UsergroupAddOutlined />
-  },
-
-  {
-    label: "កំណត់",
-    style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-    children: [
-      {
-        key: "Currency",
-        style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px' },
-        label: "ប្ដូរប្រាក់",
-        children: null,
-        icon: <BsCurrencyExchange />
-      }
-    ],
-    icon: <SettingOutlined />
-  },
-];
+// Menu items are built dynamically using i18n inside the component
 
 const MainLayout = () => {
+  const { t, i18n } = useTranslation();
   const permission = getPermission();
   const { setConfig } = configStore();
   const profile = getProfile();
@@ -168,30 +37,180 @@ const MainLayout = () => {
 
   const [items, setItems] = useState([]);
 
+  // Update document lang when language changes
   useEffect(() => {
-        const link = document.createElement('link');
-        link.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&family=Roboto:wght@400;700&display=swap';
-        link.rel = 'stylesheet';
-        document.head.appendChild(link);
-        return () => { document.head.removeChild(link); };
-    }, []);
+    document.documentElement.lang = i18n.language || 'en';
+  }, [i18n.language]);
+
+  // Build menu items with translated labels
+  const menuTemplate = [
+    {
+      key: "",
+      style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '16px', fontWeight: 'bold' },
+      label: t('menu.dashboard'),
+      children: null,
+      icon: <HomeOutlined />
+    },
+    {
+      key: "pos",
+      style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+      label: t('menu.pos'),
+      children: null,
+      icon: <ShopOutlined />
+    },
+    {
+      label: t('menu.product'),
+      key: "product",
+      style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+      children: null,
+      icon: <AppstoreOutlined />
+    },
+    {
+      key: "category",
+      style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+      label: t('menu.category'),
+      children: null,
+      icon: <AppstoreAddOutlined />
+    },
+    {
+      key: "customer",
+      style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+      label: t('menu.customer'),
+      children: null,
+      icon: <UsergroupAddOutlined />
+    },
+    {
+      key: "order",
+      style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+      label: t('menu.order'),
+      children: null,
+      icon: <ShoppingCartOutlined />
+    },
+    {
+      key: "supplier",
+      style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+      label: t('menu.supplier'),
+      children: null,
+      icon: <UserSwitchOutlined />
+    },
+    {
+      label: t('menu.expense'),
+      style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+      children: [
+        {
+          key: "expanse",
+          style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+          label: t('menu.expense'),
+          children: null,
+          icon: <DollarOutlined />
+        },
+      ],
+      icon: <TransactionOutlined />
+    },
+    {
+      label: t('menu.stock'),
+      style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+      children: [
+        {
+          key: "stock",
+          style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+          label: t('menu.stock_coffee'),
+          children: null,
+          icon: "💹",
+        },
+      ],
+      icon: <SlidersOutlined />
+    },
+    {
+      label: t('menu.report'),
+      style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+      children: [
+        {
+          key: "getsalereport",
+          style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+          label: t('menu.getsalereport'),
+          children: null,
+          icon: <TbReportAnalytics />
+        },
+        {
+          key: "get_sale_summary",
+          style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+          label: t('menu.sale_summary'),
+          children: null,
+          icon: <AlignCenterOutlined />
+        }
+      ],
+      icon: <MdOutlineLibraryBooks />
+    },
+    {
+      label: t('menu.users_group'),
+      style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+      children: [
+        {
+          key: "user",
+          style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+          label: t('menu.user'),
+          children: null,
+          icon: <BsPeople />
+        },
+        {
+          key: "role",
+          style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+          label: t('menu.role'),
+          children: null,
+          icon: <UserOutlined />
+        }
+      ],
+      icon: <UsergroupAddOutlined />
+    },
+    {
+      label: t('menu.setting'),
+      style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+      children: [
+        {
+          key: "Currency",
+          style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px' },
+          label: t('menu.currency'),
+          children: null,
+          icon: <BsCurrencyExchange />
+        }
+      ],
+      icon: <SettingOutlined />
+    },
+  ];
 
   useEffect(() => {
-    getMenuByUser();
+    const link = document.createElement('link');
+    link.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&family=Roboto:wght@400;700&display=swap';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+    return () => { document.head.removeChild(link); };
+  }, []);
+
+  // Run once on mount
+  useEffect(() => {
     getConfig();
+    getMenuByUser();
     if (!profile) {
       navigate("/login");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Rebuild menu when language changes
+  useEffect(() => {
+    getMenuByUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.language]);
 
   const getMenuByUser = () => {
     let new_item_menu = [];
     if (permission?.all) {
       // Admin: show all menu items
-      new_item_menu = [...items_menu];
+      new_item_menu = [...menuTemplate];
     } else if (permission && typeof permission === 'object' && !Array.isArray(permission)) {
       // New object-based permission: include items with truthy key or allowed children
-      items_menu.forEach((item) => {
+      menuTemplate.forEach((item) => {
         const isAllowed = !!permission[item.key];
         let allowedChildren = [];
         if (item?.children && item.children.length > 0) {
@@ -203,14 +222,14 @@ const MainLayout = () => {
           new_item_menu.push(item);
         }
       });
-    } 
+    }
     // else if (permission?.pos || permission?.order || permission?.customer) {
     //   // Backward-compatibility special-case for POS-like roles
     //   new_item_menu = items_menu.filter(item => ["", "pos", "order", "customer"].includes(item.key));
     // } 
     else if (Array.isArray(permission)) {
       // Fallback to old array logic
-      items_menu?.map((item1) => {
+      menuTemplate?.map((item1) => {
         // level one
         const p1 = permission?.findIndex(
           (data1) => data1.web_route_key == "/" + item1.key
@@ -282,8 +301,9 @@ const MainLayout = () => {
     {
       key: "logout",
       danger: true,
-      label: "LOGOUT",
-      icon: <BiLogOutCircle style={{ color: "red", fontSize: 20 }}/>
+      label: t('common.logout'),
+      style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+      icon: <BiLogOutCircle style={{ color: "red", fontSize: 20 }} />
     },
   ];
 
@@ -318,15 +338,15 @@ const MainLayout = () => {
       <Layout>
         <div className="admin-header">
           <div className="admin-header-g1">
-            <div style={{padding:'6px',margin:'6px 0 0 0'}}>
+            <div style={{ padding: '6px', margin: '6px 0 0 0' }}>
               <img className="admin-logo" src={Logo} alt="Logo" />
-              <div style={{ fontWeight: 'bold', color: 'green' }}>V-Friend Coffee</div>
+              <div style={{ fontWeight: 'bold', color: 'green', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'}}>{t('app.brand')}</div>
             </div>
             <div>
-              <div className="txt-brand-name" style={{ fontFamily: 'Khmer OS Muol Light', fontWeight: 'bold',color:'#ea2618ff',fontSize:'30px',alignContent: 'center',justifyContent: 'center',margin: '30px 0 0 400px'}}>ប្រព័ន្ធគ្រប់គ្រង និងការលក់</div>
+              <div className="txt-brand-name" style={{ fontFamily: 'Khmer OS Muol Light', fontWeight: 'bold', color: '#ea2618ff', fontSize: '30px', alignContent: 'center', justifyContent: 'center', margin: '30px 0 0 300px' }}>{t('app.title')}</div>
               {/* <div className="txt-brand-name">Count : {count}</div> */}
 
-              
+
             </div>
             {/* <div>
               <Input.Search
@@ -338,37 +358,38 @@ const MainLayout = () => {
           </div>
 
           <div className="admin-header-g2">
-            {/* <div>
+            <div>
               <Dropdown
                 menu={{
-                  items: [
+                  items: [ 
                     {
-                      key: "en",
-                      label: "English",
+                      key: 'en',
+                      label: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold'}}>{t('common.english')}</span>,
                     },
                     {
-                      key: "kh",
-                      label: "Khmer",
+                      key: 'kh',
+                      label: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' }}>{t('common.khmer')}</span>,
                     },
+                    {
+                      key: 'ch',
+                      label: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' }}>{t('common.chinese')}</span>,
+                    } 
                   ],
                   onClick: (event) => {
-                    if (event.key == "en") {
-                      setConfig({ lang: "en" });
-                    } else if (event.key == "kh") {
-                      setConfig({ lang: "kh" });
-                    }
+                    i18n.changeLanguage(event.key);
                   },
                 }}
                 trigger={['click']}
                 placement="bottomRight"
+                overlayClassName="custom-dropdown"
               >
-                <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                  <span>Language</span>
-                  <GrLanguage style={{ fontSize: '18px' }} />
+                <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' }}>
+                  <span>{t('common.language')}</span>
+                  <GrLanguage style={{ fontSize: '18px', }} />
                 </div>
               </Dropdown>
             </div>
-            <div>&nbsp;&nbsp;&nbsp;</div> */}
+            <div>&nbsp;&nbsp;&nbsp;</div>
             <IoIosNotifications className="icon-notify" style={{ width: 30, height: 30 }} />
             <MdOutlineMarkEmailUnread className="icon-email" style={{ width: 30, height: 30 }} />
             <div>

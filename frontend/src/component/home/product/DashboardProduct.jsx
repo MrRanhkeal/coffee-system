@@ -3,8 +3,10 @@ import { Card, Space, Statistic } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { request } from '../../../util/helper';
 import PropTypes from "prop-types";
+import { useTranslation } from 'react-i18next';
 function DashboardProduct() {
     const [products, setProducts] = useState(0);
+    const { t } = useTranslation();
     useEffect(() => {
         const link = document.createElement('link');
         link.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;700&family=Roboto:wght@400;700&display=swap';
@@ -58,7 +60,7 @@ function DashboardProduct() {
                         }}
                     />
                 }
-                title={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ទំនិញ</span>}
+                title={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('dashboard.labels.products')}</span>}
                 value={products}
             />
         </Space>

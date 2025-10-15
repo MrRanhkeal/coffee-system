@@ -3,7 +3,7 @@ import { request } from "../../util/helper";
 import { Button, Form, Input, message, Modal, Space, Table, Select, Tag } from "antd";
 import { DeleteOutlined, EditOutlined, FileAddFilled } from "@ant-design/icons";
 import { } from "react-icons/md";
-
+import { useTranslation } from "react-i18next";
 function RolePage() {
     // Define available routes for permission selection
     // const availableRoutes = [
@@ -12,6 +12,7 @@ function RolePage() {
     //     { value: 'report', label: 'Report' },
     //     // Add more routes as needed
     // ];
+    const {t} = useTranslation();
     const [state, setState] = useState({
         list: [],
         loading: true,
@@ -89,11 +90,11 @@ function RolePage() {
     // Handle delete button click
     const handleDelete = (record) => {
         Modal.confirm({
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>លុប {record.name}</span>,
-            content: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>តើអ្នកចង់លុប {record.name} មែនទេ ?</span>,
-            okText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>បាទ/ចាស</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('role.confirm.delete_title', { name: record.name })}</span>,
+            content: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>{t('role.confirm.delete_content', { name: record.name })}</span>,
+            okText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>{t('common.yes')}</span>,
             okType: 'danger',
-            cancelText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#25a331ff' }}>ទេ!</span>,
+            cancelText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#25a331ff' }}>{t('common.no')}</span>,
             onOk: async () => {
                 try {
                     const res = await request("role", "delete", { id: record.id });
@@ -152,13 +153,13 @@ function RolePage() {
     // Table columns configuration
     const columns = [
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ល.រ</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('common.number')}</span>,
             key: "index",
             width: 70,
             render: (_, __, index) => index + 1
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ឈ្មោះតួនាទី</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('role.table.name')}</span>,
             dataIndex: "name",
             render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
             key: "name",
@@ -169,18 +170,18 @@ function RolePage() {
             // }
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សិទ្ធិប្រើប្រាស់</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('role.table.permission')}</span>,
             dataIndex: "permission",
             key: "permission",
             render: (permissionOptions) => {
                 let tags = [];
                 try {
                     if (permissionOptions === 'all') {
-                        tags.push(<Tag color="blue" key="all" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>All</Tag>);
+                        tags.push(<Tag color="blue" key="all" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('role.table.all')}</Tag>);
                     } else if (permissionOptions) {
                         const parsed = typeof permissionOptions === 'string' ? JSON.parse(permissionOptions) : permissionOptions;
                         if (parsed && parsed.all) {
-                            tags.push(<Tag color="blue" key="all" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>All</Tag>);
+                            tags.push(<Tag color="blue" key="all" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('role.table.all')}</Tag>);
                         } else if (parsed && typeof parsed === 'object') {
                             Object.keys(parsed).forEach(k => {
                                 if (parsed[k]) {
@@ -197,7 +198,7 @@ function RolePage() {
 
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សកម្មភាព</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('common.action')}</span>,
             key: "action",
             width: 150,
             render: (_, record) => (
@@ -225,10 +226,10 @@ function RolePage() {
                 // }}
                 >
                     <FileAddFilled style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
-                    បញ្ចូលថ្មី
+                    {t('common.new')}
                 </Button>
             </div>
-            <h3 style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', margin: '0 0 10px 0' }}>តារាងគ្រប់គ្រងតួនាទី</h3>
+            <h3 style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', margin: '0 0 10px 0' }}>{t('role.title')}</h3>
             <Table
                 columns={columns}
                 dataSource={state.list}
@@ -239,7 +240,7 @@ function RolePage() {
 
             <Modal
                 style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
-                title={form.getFieldValue("id") ? "កែប្រែ" : "បង្កើតថ្មី"}
+                title={form.getFieldValue("id") ? t('common.update') : t('common.new')}
                 open={state.visible}
                 onCancel={handleCancel}
                 footer={null}
@@ -256,30 +257,30 @@ function RolePage() {
 
                     <Form.Item
                         name="name"
-                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ឈ្មោះតួនាទី</span>}
+                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('role.labels.name')}</span>}
                         rules={[{ required: true, message: "Please input role name" }]}
                     >
-                        <Input placeholder="ឈ្មោះតួនាទី" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
+                        <Input placeholder={t('role.labels.name')} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
                     </Form.Item>
                     <Form.Item
                         name="permission"
-                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សិទ្ធិប្រើប្រាស់</span>}
+                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('role.labels.permission')}</span>}
                     >
                         <Select
                             mode="multiple"
                             allowClear
-                            placeholder="ជ្រើសសិទ្ធិ"
+                            placeholder={t('role.labels.permission')}
                             options={permissionOptions}
                             style={{ width: '100%', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                         />
                     </Form.Item>
                     <Form.Item style={{ textAlign: "right" }}>
                         <Space>
-                            <Button type="default" onClick={handleCancel} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{state.isReadOnly ? "បិទ" : "បោះបង់"}</Button>
+                            <Button type="default" onClick={handleCancel} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{state.isReadOnly ? t('common.close') : t('common.cancel')}</Button>
                             <Button type="primary" htmlType="submit"
                                 style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                             >
-                                {form.getFieldValue("id") ? "កែប្រែ" : "រក្សាទុក"}
+                                {form.getFieldValue("id") ? t('common.update') : t('common.save')}
                             </Button>
                         </Space>
                     </Form.Item>

@@ -4,6 +4,7 @@ import { setServerSatus } from "../store/server.store";
 import { getAcccessToken } from "../store/profile.store";
 import dayjs from "dayjs";
 
+
 export const request = (url = "", method = "get", data = {}) => {
   var access_token = getAcccessToken();
   // var permission = getPermission();
@@ -50,12 +51,22 @@ export const request = (url = "", method = "get", data = {}) => {
     });
 };
 
-export const formatDateClient = (date, format = "DD/MM/YYYY") => {
-  if (date) return dayjs(date).format(format);
-  return null;
+export const formatDateClient = (date,) => {
+  const utcDate = new Date(date);
+  // Manually add 7 hours (UTC+7)
+  const utcPlus7 = new Date(utcDate.getTime() + 7 * 60 * 60 * 1000);
+  return utcPlus7.toLocaleString('en-GB', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
 };
 
-export const formatDateServer = (date, format = "YYYY-MM-DD") => {
+export const formatDateServer = (date, format = "YYYY-MM-DD HH:mm:ss") => {
   if (date) return dayjs(date).format(format);
   return null;
 };

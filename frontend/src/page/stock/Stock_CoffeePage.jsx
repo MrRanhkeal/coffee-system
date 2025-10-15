@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button, Table, Modal, Form, Input, message, Select, Tag, Space, InputNumber } from 'antd';
-import { request } from '../../util/helper';
+import { request, formatDateClient } from '../../util/helper';
 import { DeleteOutlined, EditOutlined, EyeOutlined, FileAddFilled } from '@ant-design/icons';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import { configStore } from '../../store/configStore';
+import { useTranslation } from 'react-i18next';
 import { IoMdEye } from 'react-icons/io';
-
 function Stock_CoffeePage() {
+    const { t } = useTranslation();
     const [state, setState] = useState({
         loading: false,
         data: [],
@@ -33,6 +34,7 @@ function Stock_CoffeePage() {
         categories: "",
         txtSearch: "",
     });
+
     // get suppliers list
     const getSuppliers = useCallback(async () => {
         try {
@@ -182,13 +184,13 @@ function Stock_CoffeePage() {
     const onClickDelete = async (record) => {
         try {
             Modal.confirm({
-                title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ការលុបទំនិញ</span>,
+                title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('product.confirm.delete_title', { name: record.product_name })}</span>,
                 // content: `តើអ្នកចង់លុបទំនិញនេះមែនទេ! ${record.product_name} ?`,
-                content: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>តើអ្នកចង់លុបទំនិញនេះមែនទេ! {record.product_name} ?</span>,
+                content: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>{t('product.confirm.delete_content', { name: record.product_name })}</span>,
                 //okText: 'បាទ/ចាស',
-                okText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>បាទ/ចាស</span>,
+                okText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>{t('common.yes')}</span>,
                 okType: 'danger',
-                cancelText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#25a331ff' }}>ទេ!</span>,
+                cancelText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#25a331ff' }}>{t('common.no')}</span>,
                 onOk: async () => {
                     const res = await request('stock_coffee', 'delete', { id: record.id });
                     if (res && !res.error) {
@@ -238,12 +240,12 @@ function Stock_CoffeePage() {
     };
     return (
         <div style={{ margin: 0, padding: 0, fontSize: "20px", color: "rgb(237, 53, 53)", fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} loading={loading}>
-            <div style={{ margin: '20px 0', padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}> 
+            <div style={{ margin: '20px 0', padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
                 {(() => {
                     const TotalCost = Array.isArray(total_cost) && total_cost.length > 0
                         ? total_cost[0].total_cost || 0
                         : 0;
-                    return <span>ការចំណាយសរុប: ${Number(TotalCost).toFixed(2)}</span>;
+                    return <span>{t('stock.labels.totalexpense')}: ${Number(TotalCost).toFixed(2)}</span>;
                 })()}
             </div>
             <div style={{ marginBottom: 2, textAlign: 'right', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
@@ -252,14 +254,14 @@ function Stock_CoffeePage() {
                     onClick={openModal}
                     style={{ padding: "10px", marginBottom: "10px", marginLeft: "auto", fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                 >
-                    <FileAddFilled style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />បញ្ចូលថ្មី
+                    <FileAddFilled style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />{t('common.new')}
                 </Button>
             </div>
-            <div style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', margin: '0 0 10px 0' }}>ស្តុកកាហ្វេ</div>
+            <div style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', margin: '0 0 10px 0' }}>{t('stock.labels.stockcoffee')}</div>
             <Modal
                 style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                 open={state.visibleModal || isModalVisible}
-                title={state.isReadOnly ? "មើល" : editingId ? "កែប្រែ" : (editingId && editingId.id ? "" : "បញ្ចូលថ្មី")}
+                title={state.isReadOnly ? t('common.view') : editingId ? t('common.update') : (editingId && editingId.id ? "" : t('common.new'))}
                 onCancel={() => {
                     setIsModalVisible(false);
                     setState(p => ({ ...p, visibleModal: false, isReadOnly: false }));
@@ -275,7 +277,7 @@ function Stock_CoffeePage() {
                             form.resetFields();
                             setEditingId(null);
                         }}>
-                        បិទ
+                        {t('common.close')}
                     </Button>
                 ] : null}
                 width={600}
@@ -288,7 +290,7 @@ function Stock_CoffeePage() {
                 >
                     <Form.Item
                         name="product_name"
-                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ឈ្មោះទំនិញ</span>}
+                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('stock.labels.name')}</span>}
                         rules={[
                             {
                                 required: true,
@@ -298,7 +300,7 @@ function Stock_CoffeePage() {
                     >
                         <Select
                             style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
-                            placeholder="ជ្រើសរើស ឈ្មោះទំនិញ"
+                            placeholder={t('stock.placeholders.product')}
                             showSearch
                             allowClear
                             // options={(config.product_name || []).map(item => ({
@@ -326,16 +328,16 @@ function Stock_CoffeePage() {
                     </Form.Item>
                     <Form.Item
                         name="categories"
-                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ប្រភេទទំនិញ</span>}
+                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('stock.labels.category')}</span>}
                         style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                         rules={[{ required: true, message: 'សូមបញ្ចូលប្រភេទទំនិញ!' }]}
                     >
                         <Select
                             style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
-                            placeholder="ជ្រើសរើសប្រភេទទំនិញ"
+                            placeholder={t('stock.placeholders.category')}
                             showSearch
                             allowClear
-                            optionFilterProp="children" 
+                            optionFilterProp="children"
                             options={config.categories?.map((opt) => ({
                                 value: opt.value,
                                 label: (
@@ -356,13 +358,13 @@ function Stock_CoffeePage() {
                     </Form.Item>
                     <Form.Item
                         name="supplier_id"
-                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>អ្នកផ្គត់ផ្គង់ទំនិញ</span>}
+                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('stock.labels.supplier')}</span>}
                         style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                         rules={[{ required: true, message: 'Please select a supplier!' }]}
                     >
                         <Select
                             style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
-                            placeholder="ជ្រើសរើសអ្នកផ្គត់ទំនិញ"
+                            placeholder={t('stock.placeholders.supplier')}
                             showSearch
                             optionFilterProp="children"
                             filterOption={(input, option) =>
@@ -379,7 +381,7 @@ function Stock_CoffeePage() {
                     </Form.Item>
                     <Form.Item
                         name="qty"
-                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ចំនួនទំនិញក្នុងស្តុក</span>}
+                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('stock.labels.qtyinstock')}</span>}
                         style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                     >
                         <InputNumber disabled min={0} style={{ width: '100%' }} />
@@ -387,7 +389,7 @@ function Stock_CoffeePage() {
 
                     <Form.Item
                         name="newQty"
-                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ចំនួនបន្ថែម</span>}
+                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('stock.labels.newqty')}</span>}
                         style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                         rules={[{ required: true, message: 'Please input quantity to add!' }]}
                     >
@@ -395,7 +397,7 @@ function Stock_CoffeePage() {
                     </Form.Item>
                     <Form.Item
                         name="cost"
-                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ការចំណាយ/Kg</span>}
+                        label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('stock.labels.expenseKg')}</span>}
                         style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                     >
                         <InputNumber
@@ -409,14 +411,14 @@ function Stock_CoffeePage() {
                     </Form.Item>
                     <Form.Item
                         name="description"
-                        label={<span style={{ fontFamily: '"Noto Sans Khmer", Roboto, sans-serif' }}>ពណ៌នា</span>}
+                        label={<span style={{ fontFamily: '"Noto Sans Khmer", Roboto, sans-serif' }}>{t('stock.labels.description')}</span>}
                         style={{ fontFamily: '"Noto Sans Khmer", Roboto, sans-serif' }}
                         rules={[{ required: true, message: 'Please input description!' }]}
                     >
                         <Input.TextArea
                             style={{ fontFamily: '"Noto Sans Khmer", Roboto, sans-serif' }}
                             rows={3}
-                            placeholder="ពណ៌នា"
+                            placeholder={t('stock.placeholders.description')}
                             disabled={state.isReadOnly}
                         />
                     </Form.Item>
@@ -424,17 +426,17 @@ function Stock_CoffeePage() {
 
                     <Form.Item
                         name="status"
-                        label={<span style={{ fontFamily: '"Noto Sans Khmer", Roboto, sans-serif' }}>ស្ថានភាព</span>}
+                        label={<span style={{ fontFamily: '"Noto Sans Khmer", Roboto, sans-serif' }}>{t('stock.labels.status')}</span>}
                         style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                         initialValue={1}
                     >
                         <Select
-                            placeholder="សូមជ្រើសរើសស្ថានភាព"
+                            placeholder={t('stock.placeholders.status')}
                             style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                             disabled={state.isReadOnly}
                         >
-                            <Select.Option value={1} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សកម្ម</Select.Option>
-                            <Select.Option value={0} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>អសកម្ម</Select.Option>
+                            <Select.Option value={1} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('common.active')}</Select.Option>
+                            <Select.Option value={0} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('common.inactive')}</Select.Option>
                         </Select>
                     </Form.Item>
 
@@ -449,10 +451,10 @@ function Stock_CoffeePage() {
                                     form.resetFields();
                                     setEditingId(null);
                                 }}>
-                                បោះបង់
+                                {}{t('common.cancel')}
                             </Button>
                             <Button type="primary" htmlType="submit" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} loading={state.loading}>
-                                {editingId ? "កែប្រែ" : (editingId && editingId.id ? "" : "រក្សាទុក")}
+                                {editingId ? t('common.update') : (editingId && editingId.id ? "" : t('common.save'))}
                             </Button>
 
                         </Form.Item>
@@ -465,12 +467,12 @@ function Stock_CoffeePage() {
                     {
                         key: "id",
                         //title: "ល.រ",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ល.រ</span>,
+                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('common.number')}</span>,
                         render: (item, data, index) => index + 1,
                     },
                     {
                         key: "product_name",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ឈ្មោះទំនិញ</span>,
+                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('stock.labels.name')}</span>,
                         dataIndex: "product_name",
                         render: (data) => (
                             <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
@@ -480,7 +482,7 @@ function Stock_CoffeePage() {
                     },
                     {
                         key: "categories",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ប្រភេទទំនិញ</span>,
+                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('stock.labels.category')}</span>,
                         dataIndex: "categories",
                         render: (data) => (
                             <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
@@ -490,7 +492,7 @@ function Stock_CoffeePage() {
                     },
                     {
                         key: "supplier_id",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>អ្នកផ្គត់ផ្គង់</span>,
+                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('stock.labels.supplier')}</span>,
                         dataIndex: "supplier_id",
                         // render: (data, row) => (
                         //     <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
@@ -505,25 +507,25 @@ function Stock_CoffeePage() {
                     },
                     {
                         key: "qty",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ចំនួនក្នុងស្តុក</span>,
+                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('stock.labels.qtyinstock')}</span>,
                         dataIndex: "qty",
                         render: (qty) => parseFloat(qty).toFixed(2) + ' Kg',
                     },
                     {
                         key: "cost",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ចំណាយ/Kg</span>,
+                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('stock.labels.expenseKg')}</span>,
                         dataIndex: "cost",
                         render: (cost) => '$' + cost,
                     },
                     {
                         key: "total_cost",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ចំណាយសរុប</span>,
+                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('stock.labels.totalexpense')}</span>,
                         dataIndex: "total_cost",
                         render: (total_cost) => '$' + total_cost,
                     },
                     {
                         key: "description",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សម្គាល់</span>,
+                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('stock.labels.description')}</span>,
                         dataIndex: "description",
                         render: (description) => (
                             <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
@@ -531,27 +533,35 @@ function Stock_CoffeePage() {
                             </span>
                         ),
 
-                    },
+                    }, 
                     {
                         key: "create_at",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>កាលបរិច្ឆេទបង្កើត</span>,
+                        title: (
+                            <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                                {t('stock.labels.created_at')}
+                            </span>
+                        ),
                         dataIndex: "create_at",
-                        render: (date) => new Date(date).toLocaleDateString("en-GB", { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+                        render: (date) => (
+                            <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                                {formatDateClient(date)}
+                            </span>
+                        ), 
                     },
                     {
                         key: "status",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ស្ថានភាព</span>,
+                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('stock.labels.status')}</span>,
                         dataIndex: "status",
                         render: (status) =>
                             status == 1 ? (
-                                <Tag color="green" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សកម្ម</Tag>
+                                <Tag color="green" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('common.active')}</Tag>
                             ) : (
-                                <Tag color="red" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>អសកម្ម</Tag>
+                                <Tag color="red" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('common.inactive')}</Tag>
                             ),
                     },
                     {
                         key: "Action",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សកម្មភាព</span>,
+                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('common.action')}</span>,
                         align: "center",
                         render: (item, data, index) => (
                             <Space>
@@ -578,7 +588,7 @@ function Stock_CoffeePage() {
                     },
                 ]}
             />
-        </div>
+        </div >
     );
 }
 

@@ -3,24 +3,26 @@ const { db, isArray, isEmpty, logErr } = require("../util/helper");
 
 exports.getList = async (req, res) => {
     try {
-        var txtSearch = req.query.txtSearch;
-        var sql = "SELECT * FROM expenses ";
+        const txtSearch = req.query.txtSearch;
+        let sql = "SELECT * FROM expenses";
+        const replacements = {};
+
         if (!isEmpty(txtSearch)) {
             sql += " WHERE expense_type LIKE :txtSearch";
+            replacements.txtSearch = "%" + txtSearch + "%";
         }
-        const [list] = await db.query(sql, {
-            txtSearch: "%" + txtSearch + "%",
-        });
-        res.json({
-            list: list,
-        });
+
+        sql += " ORDER BY id DESC"; // Always add ORDER BY at the end
+
+        const [list] = await db.query(sql, replacements);
+        res.json({ list });
     } catch (error) {
         logErr("expense.getList", error, res);
     }
 };
 exports.create = async (req, res) => {
     try {
-        const { expense_type,vendor_payee, amount, payment_method } = req.body;
+        const { expense_type, vendor_payee, amount, payment_method } = req.body;
         if (isEmpty(expense_type) || isEmpty(amount) || isEmpty(vendor_payee) || isEmpty(payment_method)) {
             return res.status(400).json({ status: "error", message: "Invalid input" });
         }
@@ -32,7 +34,7 @@ exports.create = async (req, res) => {
             req.body.payment_method || null, // Optional field
             req.body.description || null, // Optional field
             //req.body.expense_date || null, // Optional field
-            req.auth?.name 
+            req.auth?.name
         ]);
         res.json({
             data: data,
@@ -45,7 +47,7 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const {id, expense_type,vendor_payee, amount, payment_method, description } = req.body;
+        const { id, expense_type, vendor_payee, amount, payment_method, description } = req.body;
         if (isEmpty(expense_type) || isEmpty(amount) || isEmpty(vendor_payee) || isEmpty(payment_method)) {
             return res.status(400).json({ status: "error", message: "Invalid input" });
         }
@@ -89,7 +91,7 @@ exports.remove = async (req, res) => {
 };
 exports.getexpense_summary = async (req, res) => {
     try {
-        const [expense_month] = await db.query( 
+        const [expense_month] = await db.query(
             `SELECT 
                 YEAR(e.create_at) as year, 
                 MONTH(e.create_at) as month,
@@ -121,7 +123,7 @@ exports.getexpense_summary = async (req, res) => {
                 AND MONTH(e.create_at) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
             GROUP BY YEAR(e.create_at), MONTH(e.create_at);`
         );
-        const [expense_year] = await db.query( 
+        const [expense_year] = await db.query(
             `SELECT 
                 YEAR(e.create_at) as year, 
                 SUM(e.amount) as expense_per_year
@@ -137,17 +139,11 @@ exports.getexpense_summary = async (req, res) => {
                 WHERE 
                 YEAR(e.create_at) = YEAR(CURRENT_DATE);`
         );
-        const [total_expense] = await db.query(
+        const [total_expense] = await db.query( 
             `SELECT 
-                SUM(expense) AS total_expense
-            FROM (
-                SELECT SUM(e.amount) AS expense
-                FROM expenses e
-                WHERE 
-                    (YEAR(e.create_at) = YEAR(CURRENT_DATE) AND MONTH(e.create_at) = MONTH(CURRENT_DATE))
-                    OR
-                    (YEAR(e.create_at) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(e.create_at) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH))
-            ) AS monthly_expenses;`
+                SUM(e.amount) AS total_expense
+            FROM expenses e
+            WHERE YEAR(e.create_at) = YEAR(CURRENT_DATE);`
         );
         res.json({
             expense_month: expense_month,

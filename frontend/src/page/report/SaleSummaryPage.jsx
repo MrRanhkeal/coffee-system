@@ -11,7 +11,7 @@ import { CiCalendarDate } from "react-icons/ci";
 import { BiCalendarWeek } from "react-icons/bi";
 import { LiaCalendarWeekSolid } from "react-icons/lia";
 import SaleSummaryPieChart from './SaleSummaryPieChart';
-
+import { useTranslation } from 'react-i18next';
 // Helper function to parse currency string to number
 // const parseCurrency = (value) => {
 //     if (typeof value === 'string') {
@@ -23,7 +23,7 @@ import SaleSummaryPieChart from './SaleSummaryPieChart';
 function SaleSummaryPage() {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
-
+    const { t } = useTranslation();
     // Optionally store summary and sale_summary_by_month if needed
     const [summary, setSummary] = useState(null);
     const [saleSummaryByMonth, setSaleSummaryByMonth] = useState([]);
@@ -75,67 +75,67 @@ function SaleSummaryPage() {
     };
     const months = [
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ឆ្នាំ</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.year')}</span>,
             dataIndex: 'year',
             key: 'year',
         },
         {
             key: 'jan',
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>មករា</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.jan')}</span>,
             dataIndex: 'jan',
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>កុម្ភៈ</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.feb')}</span>,
             dataIndex: 'feb',
             key: 'feb',
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>មីនា</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.mar')}</span>,
             dataIndex: 'mar',
             key: 'mar',
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>មេសា</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.apr')}</span>,
             dataIndex: 'apr',
             key: 'apr',
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ឧសភា</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.may')}</span>,
             dataIndex: 'may',
             key: 'may',
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>មិថុនា</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.jun')}</span>,
             dataIndex: 'jun',
             key: 'jun',
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>កក្កដា</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.jul')}</span>,
             dataIndex: 'jul',
             key: 'jul',
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សីហា</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.aug')}</span>,
             dataIndex: 'aug',
             key: 'aug',
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>កញ្ញា</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.sep')}</span>,
             dataIndex: 'sep',
             key: 'sep',
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>តុលា</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.oct')}</span>,
             dataIndex: 'oct',
             key: 'oct',
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>វិច្ឆិកា</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.nov')}</span>,
             dataIndex: 'nov',
             key: 'nov',
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ធ្នូ</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.dec')}</span>,
             dataIndex: 'dec',
             key: 'dec',
         },
@@ -143,29 +143,29 @@ function SaleSummaryPage() {
     return (
         <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                <span style={{ fontWeight: 'bold', fontSize: 20, color: '#ef4e0aff', fontFamily: 'Khmer OS Muol Light' }}>របាយការណ៍នៃការលក់</span>
+                <span style={{ fontWeight: 'bold', fontSize: 20, color: '#ef4e0aff', fontFamily: 'Khmer OS Muol Light' }}>{t('report.labels.salereport')}</span>
                 <Button type="primary" onClick={getData} loading={loading}><IoIosRefresh />Refresh</Button>
             </div>
             {summary && (
                 <div style={{ marginBottom: 16, fontSize: 16 }}>
-                    <b style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ការលក់ក្នុងខែនេះ</b> <span style={{ color: '#ea4909ff', fontWeight: 'bold' }}>{summary.summary.Total}</span>  <br /> <b style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ការបញ្ជារទិញក្នុងខែនេះ</b> <span style={{ color: '#ea4909ff', fontWeight: 'bold' }}>{summary.summary.Total_Order} </span><b style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ប៉ុង</b>
+                    <b style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.salethismonth')}</b> <span style={{ color: '#ea4909ff', fontWeight: 'bold' }}>{summary.summary.Total}</span>  <br /> <b style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.orderthismonth')}</b> <span style={{ color: '#ea4909ff', fontWeight: 'bold' }}>{summary.summary.Total_Order} </span><b style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.bong')}</b>
                 </div>
             )}
             <div style={{ margin: '20px 0', padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
-                <h3 style={{ marginBottom: 16, color: '#fa0808ff', fontSize: 20, fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>របាយការណ៍នៃការលក់</h3>
+                <h3 style={{ marginBottom: 16, color: '#fa0808ff', fontSize: 20, fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.salereport')}</h3>
                 {summaryPerWeek ? (
                     <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                         {summaryLastMonth && (
                             <div style={{ margin: '10px', color: '#f04107ff', backgroundColor: '#e6ece4ff', borderRadius: 6, fontSize: 20, padding: 18, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', fontWeight: 'bold', textAlign: 'center' }}>
                                 <MdCalendarMonth style={{ justifyContent: 'center', alignItems: 'center' }} />
-                                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ខែមុន&nbsp;</b>
+                                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.lastmonth')}&nbsp;</b>
                                 <span style={{ color: '#da2016ff', fontWeight: 'bold' }}>${parseFloat(summaryLastMonth.total || '0').toFixed(2)}</span>
                             </div>
                         )}
                         {last_week && (
                             <div style={{ margin: '10px', color: '#0c3e6b', backgroundColor: '#e2e8ecff', borderRadius: 6, fontSize: 20, padding: 18, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', fontWeight: 'bold', textAlign: 'center' }}>
                                 <LiaCalendarWeekSolid />
-                                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សប្តាហ៍មុន&nbsp;</b>
+                                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.thisweek')}&nbsp;</b>
                                 <span style={{ color: '#da2016ff', fontWeight: 'bold' }}>
                                     ${parseFloat((last_week?.total_last_week || summaryPerWeek?.[1]?.total_last_week || summaryPerWeek?.[1]?.total_per_week || '0')).toFixed(2)}
                                 </span>
@@ -174,7 +174,7 @@ function SaleSummaryPage() {
                         {summary && (
                             <div style={{ margin: '10px', color: '#e3683fff', backgroundColor: '#e4eae2ff', borderRadius: 6, fontSize: 20, padding: 18, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', fontWeight: 'bold', textAlign: 'center' }}>
                                 <FaCalendarWeek />
-                                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ខែនេះ&nbsp;</b>
+                                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.thismonth')}&nbsp;</b>
                                 <span style={{ color: '#da2016ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>${parseFloat(summary.summary.Total?.replace('$', '') || '0').toFixed(2)}</span>
                             </div>
                         )}
@@ -191,7 +191,7 @@ function SaleSummaryPage() {
                         {(this_week || (summaryPerWeek && summaryPerWeek.length > 0)) && (
                             <div style={{ margin: '10px', color: '#0c3e6b', backgroundColor: '#e1e6eaff', borderRadius: 6, fontSize: 20, padding: 18, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', fontWeight: 'bold', textAlign: 'center' }}>
                                 <BiCalendarWeek />
-                                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សប្តាហ៍នេះ&nbsp;</b>
+                                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.thisweek')}&nbsp;</b>
                                 <span style={{ color: '#da2016ff', fontWeight: 'bold' }}>
                                     ${parseFloat((this_week?.total_this_week || summaryPerWeek?.[0]?.total_this_week || '0')).toFixed(2)}
                                 </span>
@@ -200,7 +200,7 @@ function SaleSummaryPage() {
                         {summary_per_year && (
                             <div style={{ margin: '10px', color: '#0c3e6b', backgroundColor: '#e8e6e2ff', borderRadius: 6, fontSize: 20, padding: 18, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', fontWeight: 'bold', textAlign: 'center' }}>
                                 <CiCalendarDate />
-                                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ឆ្នាំនេះ&nbsp;</b>
+                                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.thisyear')}&nbsp;</b>
                                 <span style={{ color: '#da2016ff', fontWeight: 'bold' }}>${parseFloat(summary_per_year[0]?.total_per_year || '0').toFixed(2)}</span>
                             </div>
                         )}
@@ -220,7 +220,7 @@ function SaleSummaryPage() {
             <div style={{ marginTop: 32, marginBottom: 32 }}>
                 {saleSummaryByMonth?.[0] ? (
                     <div>
-                        <h3 style={{ textAlign: 'center', marginBottom: 24, color: '#f33939ff', fontSize: 20, fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold' }}>ការវិភាគការលក់ប្រចាំខែ</h3> 
+                        <h3 style={{ textAlign: 'center', marginBottom: 24, color: '#f33939ff', fontSize: 20, fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold' }}>{t('report.labels.analysispermoth')}</h3> 
                         <div style={{ marginBottom: 24 }}> 
                             <div style={{ height: 400 ,fontFamily: 'Noto Sans Khmer, Roboto, sans-serif',display: 'flex', justifyContent: 'space-between'}}>
                                 <SaleSummaryChart />
@@ -237,7 +237,7 @@ function SaleSummaryPage() {
                         borderRadius: '8px',
                         backgroundColor: '#f9f9f9'
                     }}>
-                        <p style={{ fontSize: '16px', color: '#666' }}>No sales data available to display charts</p>
+                            <p style={{ fontSize: '16px', color: '#666' }}>{t('report.labels.nodatatoshow')}</p>
                         <Button type="primary" onClick={getData} style={{ marginTop: '10px' }}>
                             <IoIosRefresh /> Refresh Data
                         </Button>
@@ -246,7 +246,7 @@ function SaleSummaryPage() {
             </div>
             {data.length === 0 && !loading && (
                 <div style={{ textAlign: 'center', marginTop: 20 }}>
-                    <span>No data available</span>
+                    <span>{t('report.labels.nodata')}</span>
                 </div>
             )}
         </div>

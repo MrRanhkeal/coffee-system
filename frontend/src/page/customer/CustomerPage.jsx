@@ -8,7 +8,9 @@ import { DeleteOutlined, EditOutlined, EyeOutlined, FileAddFilled } from "@ant-d
 import { Flex } from 'antd';
 import { IoMdEye } from "react-icons/io";
 import { FiSearch } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 function CustomerPage() {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -82,11 +84,11 @@ function CustomerPage() {
   }
   const onClickDelete = async (data) => {
     Modal.confirm({
-      title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>លុប{data.name}</span>,
-      content: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>តើអ្នកចង់លុប {data.name} មែនទេ ?</span>,
-      okText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>បាទ/ចាស</span>,
+      title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('customer.confirm.delete_title', { name: data.name })}</span>,
+      content: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>{t('customer.confirm.delete_content', { name: data.name })}</span>,
+      okText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#e42020ff' }}>{t('common.yes')}</span>,
       okType: 'danger',
-      cancelText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#25a331ff' }}>ទេ!</span>,
+      cancelText: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', color: '#25a331ff' }}>{t('common.no')}</span>,
       onOk: async () => {
         const res = await request("customer", "delete", {
           id: data.id,
@@ -150,7 +152,7 @@ function CustomerPage() {
           </Flex> */}
           <Flex>
             <Input
-              placeholder="ស្វែងរក"
+              placeholder={t('common.search')}
               prefix={<FiSearch />}
               className="khmer-search"
               value={state.txtSearch || ""}
@@ -179,14 +181,14 @@ function CustomerPage() {
           </Button> */}
         </Space>
         <Button type="primary" style={{ padding: "10px", marginBottom: "10px", marginLeft: "auto", fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} onClick={onClickAddBtn} >
-          <FileAddFilled style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} /> បញ្ចូលថ្មី
+          <FileAddFilled /> {t('common.new')}
         </Button>
       </div>
-      <div style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', margin: '0 0 10px 0' }}>តារាងអតិថិជន </div>
+      <div style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold', margin: '0 0 10px 0' }}>{t('customer.title')} </div>
       <Modal
         style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
         open={state.visibleModal}
-        title={state.isReadOnly ? "មើល" : (state.id ? "កែប្រែ" : "បញ្ចូលអតិថិជន")}
+        title={state.isReadOnly ? t('common.view') : (state.id ? t('common.update') : t('common.new'))}
         footer={null}
         onCancel={onCloseModal}
       >
@@ -196,49 +198,49 @@ function CustomerPage() {
           <Form.Item
             style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
             name="name"
-            label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ឈ្មោះអតិថិជន</span>}
-            rules={[{ required: true, message: 'សូមបញ្ចូល ឈ្មោះអតិថិជន!' }]}
+            label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('customer.labels.name')}</span>}
+            rules={[{ required: true, message: t('customer.messages.nameRequired') }]}
           >
-            <Input placeholder="បញ្ចូល ឈ្មោះអតិថិជន" disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
+            <Input placeholder={t('customer.placeholders.name')} disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
           </Form.Item>
           <Form.Item
             name="phone"
-            label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>លេខទូរស័ព្ទ</span>}
-            rules={[{ required: true, message: 'សូមបញ្ចូល លេខទូរស័ព្ទ!' }]}
+            label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('customer.labels.phone')}</span>}
+            rules={[{ required: true, message: t('customer.messages.phoneRequired') }]}
           >
-            <Input placeholder="បញ្ចូល លេខទូរស័ព្ទ" disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
+            <Input placeholder={t('customer.placeholders.phone')} disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
           </Form.Item>
           <Form.Item
             name="email"
-            label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>អ៊ីម៉ែល</span>}
-            rules={[{ required: true, message: 'សូមបញ្ចូល អ៊ីម៉ែល!' }, { type: 'email', message: 'Please enter a valid email!' }]}
+            label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('customer.labels.email')}</span>}
+            rules={[{ required: true, message: t('customer.messages.emailRequired') }, { type: 'email', message: t('customer.messages.invalidEmail') }]}
           >
-            <Input placeholder="បញ្ចូល អ៊ីម៉ែល" disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
+            <Input placeholder={t('customer.placeholders.email')} disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
           </Form.Item>
-          <Form.Item name={"address"} label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ទីកន្លែង</span>}>
-            <Input placeholder="បញ្ចូល ទីកន្លែង" name="address" disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
+          <Form.Item name={"address"} label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('customer.labels.address')}</span>}>
+            <Input placeholder={t('customer.placeholders.address')} name="address" disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
           </Form.Item>
-          <Form.Item name={"description"} label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ពណ៌នា</span>}>
-            <Input.TextArea placeholder="ពណ៌នា" disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
+          <Form.Item name={"description"} label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('customer.labels.description')}</span>}>
+            <Input.TextArea placeholder={t('customer.placeholders.description')} disabled={state.isReadOnly} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} />
           </Form.Item>
           <Form.Item
             style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
             name="status"
-            label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ស្ថានភាព</span>}
-            rules={[{ required: true, message: 'Please select a status!' }]}
+            label={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('customer.labels.status')}</span>}
+            rules={[{ required: true, message: t('customer.messages.statusRequired') }]}
           >
             <Select
               style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
-              placeholder="ជ្រើសរើស្ថានភាព"
+              placeholder={t('customer.status')}
               disabled={state.isReadOnly}
               options={[
                 {
-                  label: "សកម្ម",
+                  label: t('common.active'),
                   value: 1,
                   style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' },
                 },
                 {
-                  label: "អសកម្ម",
+                  label: t('common.inactive'),
                   value: 0,
                   style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' },
                 },
@@ -247,10 +249,10 @@ function CustomerPage() {
           </Form.Item>
           <Form.Item style={{ textAlign: "right" }}>
             <Space>
-              <Button type="default" onClick={onCloseModal} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{state.isReadOnly ? "បិទ" : "បោះបង់"}</Button>
+              <Button type="default" onClick={onCloseModal} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{state.isReadOnly ? t('common.close') : t('common.cancel')}</Button>
               {!state.isReadOnly && (
                 <Button type="primary" htmlType="submit" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
-                  {form.getFieldValue("id") ? "កែប្រែ" : "រក្សាទុក"}
+                  {form.getFieldValue("id") ? t('common.update') : t('common.save')}
                 </Button>
               )}
             </Space>
@@ -263,51 +265,51 @@ function CustomerPage() {
         columns={[
           {
             key: "No",
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ល.រ</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('customer.table.no')}</span>,
             render: (item, data, index) => index + 1,
           },
           {
             key: "name",
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ឈ្មោរ</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('customer.table.name')}</span>,
             dataIndex: "name",
             render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
           },
           {
             key: "phone",
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>លេខទូរស័ព្ទ</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('customer.table.phone')}</span>,
             dataIndex: "phone",
           },
           {
             key: "email",
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ទំនាក់ទំនង</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('customer.table.email')}</span>,
             dataIndex: "email",
           },
           {
             key: "address",
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ទីកន្លែង</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('customer.table.address')}</span>,
             dataIndex: "address",
             render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
           },
           {
             key: "description",
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ពណ៌នា</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('customer.table.description')}</span>,
             dataIndex: "description",
             render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
           },
           {
             key: "status",
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ស្ថានភាព</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('customer.table.status')}</span>,
             dataIndex: "status",
             render: (status) =>
               status == 1 ? (
-                <Tag color="green" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សកម្ម</Tag>
+                <Tag color="green" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('common.active')}</Tag>
               ) : (
-                <Tag color="red" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>អសកម្ម</Tag>
+                <Tag color="red" style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('common.inactive')}</Tag>
               ),
           },
           {
             key: "Action",
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សកម្មភាព</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('customer.table.action')}</span>,
             align: "center",
             render: (item, data, index) => (
               <Space>

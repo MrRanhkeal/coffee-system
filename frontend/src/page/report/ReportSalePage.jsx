@@ -3,8 +3,10 @@ import { Button, DatePicker, Table, Space, message } from 'antd';
 import dayjs from 'dayjs';
 import { formatDateClient, request } from '../../util/helper';
 import { FaSearch } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 // import { formatDateClient, formatDateServer, request } from "../../util/helper";
 function ReportSalePage() {
+    const { t } = useTranslation();
     // const [fromDate, setFromDate] = useState(dayjs().startOf('month'));
     // const [toDate, setToDate] = useState(dayjs());
     const [loading, setLoading] = useState(false);
@@ -13,7 +15,7 @@ function ReportSalePage() {
     const [filter, setFilter] = useState({
         // from_date: dayjs().startOf('month'),
         from_date: dayjs().subtract(5, 'd'),
-        to_date: dayjs().add(1, 'd'),
+        to_date: dayjs().add(0, 'd'),
     })
     useEffect(() => {
         getSaleReport();
@@ -43,17 +45,17 @@ function ReportSalePage() {
     const columns = [
         { 
             key: 'No',
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ល.រ</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('common.number')}</span>,
             dataIndex: 'No',
             render: (value, record, index) => index + 1, 
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>លេខបញ្ជារទិញ</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.orderno')}</span>,
             dataIndex: 'order_no',
             key: 'order_no'
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ថ្ងៃខែ/បញ្ជារទិញ</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.orderdate')}</span>,
             dataIndex: 'order_date',
             key: 'order_date',
             // render: (value) => formatDateClient(value,"DD/MM/YYYY h:mm A")
@@ -61,49 +63,49 @@ function ReportSalePage() {
             // render: (date) => new Date(date).toLocaleDateString("en-GB", { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }),
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>អតិថិជន</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.customer')}</span>,
             dataIndex: 'customer_name',
             key: 'customer_name',
             render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>អ្នកលក់</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.cashier')}</span>,
             dataIndex: 'user_name',
             key: 'user_name',
             render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ឈ្មោះទំនិញ</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.productname')}</span>,
             dataIndex: 'product_name',
             key: 'product_name',
             render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ចំនួន</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.qty')}</span>,
             dataIndex: 'qty',
             key: 'qty',
             render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>តម្លៃលក់</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.price')}</span>,
             dataIndex: 'product_price_at_order',
             key: 'product_price_at_order',
             render: (value) =>' $'+parseFloat(value).toFixed(2) 
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ការបញ្ចុះតម្លៃ</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.discount')}</span>,
             dataIndex: 'order_detail_discount',
             key: 'order_detail_discount',
             render: (value) =>parseFloat(value).toFixed(2) + '%'
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ម៉ាក/Brand</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.brand')}</span>,
             dataIndex: 'product_brand',
             key: 'product_brand',
             render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>សរុប</span>,
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.total')}</span>,
             dataIndex: 'order_detail_total',
             key: 'order_detail_total',
             render: (value) =>' $'+parseFloat(value).toFixed(2) 
@@ -112,7 +114,7 @@ function ReportSalePage() {
     
     return (
         <div>
-            <h2 style={{ fontSize: "20px", fontWeight: "bold", color: '#e35214ff',fontFamily: 'Khmer OS Muol Light' }}>របាយការណ៍លក់</h2><br />
+            <h2 style={{ fontSize: "20px", fontWeight: "bold", color: '#e35214ff',fontFamily: 'Khmer OS Muol Light' }}>{t('report.labels.salereport')}</h2><br />
             <Space style={{ marginBottom: 16 }}> 
                 <DatePicker.RangePicker style={{ width: "400px" }}
                     allowClear={true}
@@ -138,8 +140,8 @@ function ReportSalePage() {
                     format="YYYY-MM-DD"
                     placeholder="To Date"
                 /> */}
-                <Button type="primary" onClick={getSaleReport} >
-                    <FaSearch />Filter
+                <Button type="primary" onClick={getSaleReport} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                    <FaSearch />{t('report.labels.filter')}
                 </Button>
                 {/* <Button type="primary" onClick={getSaleReport} loading={loading}>
                     Get Report

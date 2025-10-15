@@ -3,9 +3,10 @@ import { request } from '../../../util/helper';
 import { Card, Space, Statistic } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import PropTypes from "prop-types";
+import { useTranslation } from 'react-i18next';
 function DashboardOrder() {
     const [orders, setOrders] = useState(0);
-
+    const { t } = useTranslation();
     // get orders
     useEffect(() => {
         const getOrders = async () => {
@@ -53,7 +54,7 @@ function DashboardOrder() {
                         }}
                     />
                 }
-                title={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>ការបញ្ជាទិញ</span>}
+                title={<span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('dashboard.labels.orders')}</span>}
                 value={orders}
             />
         </Space>
