@@ -112,9 +112,10 @@ function RecentOrders() {
                             dataIndex: "create_at",
                             width: '20%',
                             align: 'left',
-                            //render: (value) => value ? formatDateClient(value, "DD/MM/YYYY") : "N/A"
-                            render:(date) => new Date(date).toLocaleDateString("en-GB", { localDateTime: new Date(date).toLocaleString('en-US') })  
-                            //render: (date) => new Date(date).toLocaleDateString("en-GB", { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+                            render: (date) =>
+                            <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                                {formatDateClient(date)}
+                            </span>
                         }
                     ]}
                     dataSource={dataSource}
