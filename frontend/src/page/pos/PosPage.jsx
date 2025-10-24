@@ -619,7 +619,8 @@ function PosPage() {
                     objSummary={{
                         ...objSummary,
                         // customer_id: objSummary.customer_id ? String(objSummary.customer_id) : "VIP Customer",
-                        customer_id: objSummary.customer_id ? String(objSummary.customer_id ?? "VIP Customer") : "VIP Customer",
+                        //customer_id: objSummary.customer_id ? String(objSummary.customer_id ?? "VIP Customer") : "VIP Customer",
+                        customer_id: objSummary.customer_name ? String(objSummary.customer_name ?? "VIP Customer") : "VIP Customer",
                     }}
                     cashier={profile?.name || 'System'}
                 // ...other props

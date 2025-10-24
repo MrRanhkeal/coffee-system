@@ -39,8 +39,8 @@
   background-color: #f8f9fa;
 }
 .invoice-total {
-  border-top: 2px solid #dee2e6;
-  margin-top: 2rem;
+  /* border-top: 2px solid #dee2e6;
+  margin-top: 2rem; */
 }
 .qr-code {
   width: 100px;
@@ -85,4 +85,4 @@
     margin: 5px 0;
     font-size: 10px;
   }
-} */
+} */ 

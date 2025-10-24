@@ -56,12 +56,12 @@ function LoginPage() {
       >
         <h2 
           style={{
-            color: "#12CC60",
+            color: "#eef2f0",
             fontSize: "40px",
             fontWeight: "bold",
             textAlign: "center",
             margin: "0 0 20px 0",
-            fontFamily: "Noto Sans Khmer, Roboto, sans-serif",
+            fontFamily: 'Noto Sans Khmer, Roboto, sans-serif',
           }}
         > 
           {t('login.titles')}
@@ -79,20 +79,20 @@ function LoginPage() {
             </i>
             <input
               type="email"
-              placeholder=" "  
+              placeholder="@gmail.com"
               autoComplete="email" 
               style={{
                 fontFamily: "Noto Sans Khmer, Roboto, sans-serif", 
                 margin: "0 0 0 20px",
-                color: "#ffffffff",
+                color: "#ffffffff",  
               }}
-            />
+            /> 
             <label
               style={{
                 fontFamily: "Noto Sans Khmer, Roboto, sans-serif", 
                 fontWeight: "bold",
-                margin: "0 0 0 20px",
-                color: "#080808ff",
+                margin: "0 0 0 10px",
+                color: "hsl(0, 0%, 100%)",
               }}
             >
               {t('login.username')}
@@ -113,17 +113,16 @@ function LoginPage() {
               autoComplete="current-password"
               style={{
                 fontFamily: "Noto Sans Khmer, Roboto, sans-serif", 
-                margin: "0 0 0 20px",
-                color: "#ffffffff",
-                paddingRight: "35px", // Add space for the icon
+                margin: "0 0 0 20px", 
+                color: "#ffffffff", 
               }}
             />
             <label
               style={{
                 fontFamily: "Noto Sans Khmer, Roboto, sans-serif",
                 fontWeight: "bold",
-                margin: "0 0 0 20px",
-                color: "#080808ff",
+                margin: "0 0 0 10px",
+                color: "hsl(0, 0%, 100%)",
               }}
             >
               {t('login.password')}
@@ -138,22 +137,12 @@ function LoginPage() {
                 transform: "translateY(-50%)",
                 cursor: "pointer",
                 fontSize: "20px",
-                color: "#d43232ff",
+                color: "hsl(0, 0%, 100%)",
                 zIndex: 2,
               }}
             >
               {showPassword ? <EyeTwoTone /> : <EyeInvisibleOutlined />}
-            </span>
-            {/* <label
-              style={{
-                fontFamily: "Noto Sans Khmer, Roboto, sans-serif",
-                fontWeight: "bold",
-                margin: "0 0 0 20px",
-                color: "#030a04ff",
-              }}
-            >
-              ពាក្យសម្ងាត់
-            </label> */}
+            </span> 
 
             {/* Toggle eye icon */}
             <span
@@ -177,7 +166,7 @@ function LoginPage() {
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <div className="check-box">
                 <input type="checkbox" />
-                <span style={{fontFamily: "Noto Sans Khmer, Roboto, sans-serif", color: "#080808ff"}}>{t('login.remember')}</span>
+                <span style={{ fontFamily: "Noto Sans Khmer, Roboto, sans-serif", color: "hsl(0, 0%, 100%)"}}>{t('login.remember')}</span>
               </div>
             </Form.Item>
           </div>

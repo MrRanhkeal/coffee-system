@@ -42,7 +42,7 @@ const resources = {
         filter: 'Filter'
       },
       app: {
-        title: 'Management Piont of Sale',
+        title: 'POS Management',
         brand: 'V-Friend Coffee'
       },
       menu: {
@@ -869,7 +869,7 @@ const resources = {
       //login
       login: {
         title: 'ចូល', 
-        titles: 'ចុះចូល',
+        titles: 'LOGIN',
         username: 'ឈ្មោះអ្នកប្រើ',
         password: 'ពាក្យសម្ងាត់',
         remember: 'ចងចាំខ្ញុំ',
@@ -1666,7 +1666,7 @@ const resources = {
       },
       login: {
         title: '登录',
-        titles: '登录',
+        titles: 'LOGIN',
         username: '用户名',
         password: '密码',
         remember: '记住我',
