@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./Print.css";
-import Logo from "../../assets/v-friends.jpg"
+import Logo from "../../assets/v-friends.jpg";
 const PrintInvoice = React.forwardRef(({ cart_list = [], objSummary = {}, cashier = '' }, ref) => {
   // Get customer name from objSummary, handle both direct name and customer object
   //const customerName = typeof objSummary?.customer_name === 'string' ? objSummary.customer_name : 'Guest';
@@ -90,7 +90,20 @@ const PrintInvoice = React.forwardRef(({ cart_list = [], objSummary = {}, cashie
               <h2>INVOICE</h2>
               <h6>Invoice #: {objSummary.order_no || generateInvoiceNumber()}</h6>
               <h6>Date: {objSummary.order_date ? new Date(objSummary.order_date).toLocaleDateString() : new Date().toLocaleDateString()}</h6>
-              <h6>Time: {objSummary.order_date ? new Date(objSummary.order_date).toLocaleTimeString('en-US', { hour12: false }) : new Date().toLocaleTimeString('en-US', { hour12: false })}</h6>
+              <h6>
+                Time: {
+                  (() => {
+                    const date = objSummary.order_date
+                      ? new Date(objSummary.order_date)
+                      : new Date();
+
+                    // Convert to UTC+7
+                    const utc7Date = new Date(date.getTime() + 7 * 60 * 60 * 1000);
+
+                    return utc7Date.toLocaleTimeString('en-US', { hour12: false });
+                  })()
+                }
+              </h6> 
             </div>
           </div>
 
@@ -143,18 +156,18 @@ const PrintInvoice = React.forwardRef(({ cart_list = [], objSummary = {}, cashie
               <div className="text-left">
                 <div className="row justify-content-left">
                   <div className="col-7">
-                    <h6 className="mb-2">Customer:</h6>
-                    <h6 className="mb-2">Payment Method:</h6>
-                    <h6 className="mb-2">Cashier:</h6> 
+                    <h6 className="mb-2">Customer:</h6><br/>
+                    <h6 className="mb-2">Payment:</h6>
+                    <h6 className="mb-2">Cashier:</h6>
                   </div>
                   <div className="col-5 text-end">
                     <h6 className="mb-2">{customerDisplay}</h6>
                     <h6 className="mb-2">{paymentMethod}</h6>
                     <h6 className="mb-2">{cashierName}</h6>
                   </div>
-                </div> 
+                </div>
                 <p className="mb-1" style={{ fontWeight: 'bold' }}>Thank you for your purchase!</p>
-                <p className="mb-1" style={{fontWeight:'bold'}}>Good luck!</p>
+                <p className="mb-1" style={{ fontWeight: 'bold' }}>Good luck!</p>
               </div>
             </div>
             <div className="col-6">
@@ -168,7 +181,7 @@ const PrintInvoice = React.forwardRef(({ cart_list = [], objSummary = {}, cashie
                     <p className="mb-0" style={{ marginLeft: '40px' }}>Change:</p>
                   </div>
                   <div className="col-5 text-end">
-                    <p className="mb-2" style={{fontWeight:'bold'}}>{formatCurrency(objSummary.sub_total)}</p>
+                    <p className="mb-2" style={{ fontWeight: 'bold' }}>{formatCurrency(objSummary.sub_total)}</p>
                     <p className="mb-2" style={{ fontWeight: 'bold' }}>{formatCurrency(objSummary.save_discount)}</p>
                     <p className="mb-2" style={{ fontWeight: 'bold' }}>{formatCurrency(objSummary.total)}</p>
                     <p className="mb-2" style={{ fontWeight: 'bold' }}>{formatCurrency(objSummary.total_paid)}</p>
@@ -178,7 +191,7 @@ const PrintInvoice = React.forwardRef(({ cart_list = [], objSummary = {}, cashie
                 </div>
               </div>
             </div>
-          </div>  
+          </div>
         </div>
         <div className="text-center mt-4 print-buttons" >
           <button className="btn btn-primary me-2" onClick={handlePrint} style={{ backgroundColor: '#1890ff', border: 'none', padding: '8px 16px' }}>Print </button>

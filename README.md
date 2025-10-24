@@ -17,5 +17,26 @@
 
 #More detail please contact me : kealranhcamkh@gmail.com
 
+#Login
+![alt text](image-8.png)
 
 #Dashboard
+![alt text](image-1.png)
+
+#POS
+![alt text](image.png)
+
+#Orders
+![alt text](image-4.png)
+
+#Reports
+![alt text](image-2.png)
+
+#Permissions
+![alt text](image-5.png)
+
+#Invoices
+![alt text](image-7.png)
+
+#QR Payments
+![alt text](image-6.png)

@@ -71,7 +71,7 @@ function LoginPage() {
         <Form.Item
           name="username"
           type="email"
-          rules={[{ required: true, message: t('validation.username_required') }]}
+          rules={[{ required: true, message: t('validation.username_required') }]} 
         >
           <div className="input-field" type='email'>
             <i>

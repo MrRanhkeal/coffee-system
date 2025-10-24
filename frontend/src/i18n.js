@@ -587,7 +587,7 @@ const resources = {
           click:'Click',
           qrpay:'Qr Payment KHQR',
           cart:'Cart',
-          cash: 'សាច់ប្រាក់'
+          cash: 'Cash'
         },
         placeholders: {
           customer: 'Please select customer', 
@@ -874,7 +874,7 @@ const resources = {
         password: 'ពាក្យសម្ងាត់',
         remember: 'ចងចាំខ្ញុំ',
         submit: 'ចូល',
-        success: 'Login ជោគជ័យ!',
+        success: 'ចូល ជោគជ័យ!',
         failed: 'ការចូលបរាជ័យ។ សូមព្យាយាមម្ដងទៀត។',
         error: 'កំហុសតភ្ជាប់ទៅម៉ាស៊ីនមេ។ សូមព្យាយាមម្ដងទៀត។'
       },

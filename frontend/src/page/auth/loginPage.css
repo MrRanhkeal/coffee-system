@@ -172,5 +172,6 @@ p {
 }
 .input-field input::placeholder {
     text-align: right; 
-    padding-right: 10px;
+    padding-right: 10px; 
+    color:#1a1919
 }

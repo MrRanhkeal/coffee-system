@@ -181,7 +181,7 @@ function PosPage() {
                     'Soda': '🥤',
                     'Ice Tea': '🍵',
                     'Milk': '🥛',
-                };  
+                };
 
                 const categoriesFromBackend = res.list.map(category => ({
                     id: category.id,
@@ -524,7 +524,7 @@ function PosPage() {
                     setObjSummary(prev => ({
                         ...prev,
                         order_no: res.order?.order_no,
-                        order_date: res.order?.create_at
+                        order_date: res.order?.create_at, 
                     }));
 
                     // Open QR modal and start timers/polling
@@ -571,8 +571,8 @@ function PosPage() {
                     const invoiceData = {
                         ...objSummary,
                         order_no: res.order?.order_no,
-                        order_date: res.order?.create_at
-                    };
+                        order_date: res.order?.create_at, 
+                    }; 
                     setObjSummary(invoiceData);
 
                     setTimeout(() => {
