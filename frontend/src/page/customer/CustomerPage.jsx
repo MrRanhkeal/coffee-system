@@ -191,6 +191,8 @@ function CustomerPage() {
         title={state.isReadOnly ? t('common.view') : (state.id ? t('common.update') : t('common.new'))}
         footer={null}
         onCancel={onCloseModal}
+        maskClosable={false}  
+        keyboard={false}    
       >
         <Form layout="vertical" onFinish={onFinish} form={form} initialValues={{
           status: 1

@@ -207,3 +207,135 @@ exports.get_sale_summary = async (req, res) => {
         logErr("report.get_sale_summary", err, res);
     }
 };
+
+exports.getExpenseReport = async (req, res) => {
+    try {
+        const from_date = req.query.from_date;
+        const to_date = req.query.to_date;
+
+        let sqlGetExpense = `
+            select
+                e.id,
+                e.amount,
+                e.expense_type,
+                e.payment_method,
+                e.vendor_payee,
+                e.create_at as expense_date,
+                e.description,
+                e.create_by
+            from expenses e
+            WHERE 1=1 `;
+
+        let sqlParam = {};
+
+        if (from_date && to_date) {
+            sqlGetExpense += " AND DATE_FORMAT(e.create_at, '%Y-%m-%d') BETWEEN :from_date AND :to_date";
+            sqlParam.from_date = from_date;
+            sqlParam.to_date = to_date;
+        }
+
+        let sqlOrderBy = " ORDER BY e.create_at DESC";
+        if (req.query.order_by === "asc") {
+            sqlOrderBy = " ORDER BY e.create_at ASC";
+        }
+
+        const [list] = await db.query(sqlGetExpense + sqlOrderBy, sqlParam);
+
+        res.json({
+            list,
+            message: "success"
+        });
+    }
+    catch (err) {
+        logErr("report.getExpenseReport", err, res);
+    }
+};
+exports.getStockReport = async (req, res) => {
+    try {
+        const from_date = req.query.from_date;
+        const to_date = req.query.to_date;
+
+        let sqlGetStock = `
+            SELECT
+                s.id,
+                s.product_name AS product_name,
+                s.qty,
+                s.categories AS categorie_name,
+                s.cost,
+                s.create_at,
+                s.create_by AS create_by,
+                s.description
+            FROM stock_coffee s
+            WHERE 1=1
+        `;
+
+        let sqlParam = {};
+
+        if (from_date && to_date) {
+            sqlGetStock += " AND DATE_FORMAT(s.create_at, '%Y-%m-%d') BETWEEN :from_date AND :to_date";
+            sqlParam.from_date = from_date;
+            sqlParam.to_date = to_date;
+        }
+
+        let sqlOrderBy = " ORDER BY s.id DESC";
+
+        if (req.query.order_by === "asc") {
+            sqlOrderBy = " ORDER BY s.id ASC";
+        }
+
+        const [list] = await db.query(sqlGetStock + sqlOrderBy, sqlParam);
+
+        res.json({
+            list,
+            message: "success"
+        });
+    }
+    catch (err) {
+        logErr("report.getStockReport", err, res);
+    }
+}
+
+exports.getProductReport = async (req, res) => {
+    try {
+        const from_date = req.query.from_date;
+        const to_date = req.query.to_date;
+
+        let sqlGetProduct = `
+            SELECT
+                sp.id,
+                sp.name_product AS product_name,
+                sp.qty,
+                sp.cost,
+                sp.supplier_id as supplier_name,
+                sp.brand_name as brand,
+                sp.create_by as create_by,
+                sp.description,
+                sp.create_at
+            FROM stock_product sp
+            WHERE 1 = 1 `;
+
+        let sqlParam = {};
+
+        if (from_date && to_date) {
+            sqlGetProduct += " AND DATE_FORMAT(sp.create_at, '%Y-%m-%d') BETWEEN :from_date AND :to_date";
+            sqlParam.from_date = from_date;
+            sqlParam.to_date = to_date;
+        }
+
+        let sqlOrderBy = " ORDER BY sp.id DESC";
+
+        if (req.query.order_by === "asc") {
+            sqlOrderBy = " ORDER BY s.id ASC";
+        }
+
+        const [list] = await db.query(sqlGetProduct + sqlOrderBy, sqlParam);
+
+        res.json({
+            list,
+            message: "success"
+        });
+    }
+    catch (err) {
+        logErr("report.getProductReport", err, res);
+    }
+}; 

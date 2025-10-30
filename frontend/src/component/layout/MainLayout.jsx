@@ -19,6 +19,9 @@ import { request } from "../../util/helper";
 import { configStore } from "../../store/configStore";
 import { useTranslation } from "react-i18next";
 import { GrLanguage } from "react-icons/gr";
+import { HiOutlineDocumentReport } from "react-icons/hi";
+import { HiDocumentReport } from "react-icons/hi";
+import { TbReportMoney } from "react-icons/tb";
 // import { icons } from "antd/es/image/PreviewGroup";
 const { Content, Sider } = Layout;
 
@@ -126,18 +129,39 @@ const MainLayout = () => {
       style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
       children: [
         {
-          key: "getsalereport",
+          key: "salereport",
           style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-          label: t('menu.getsalereport'),
+          label: t('menu.salereport'),
           children: null,
           icon: <TbReportAnalytics />
         },
         {
-          key: "get_sale_summary",
+          key: "salesummary",
           style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
-          label: t('menu.sale_summary'),
+          label: t('menu.salesummary'),
           children: null,
           icon: <AlignCenterOutlined />
+        },
+        {
+          key: "expensereport",
+          style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+          label: t('menu.expensereport'),
+          children: null,
+          icon: <HiOutlineDocumentReport />
+        },
+        {
+          key: "stockreport",
+          style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+          label: t('menu.stockreport'),
+          children: null,
+          icon: <HiDocumentReport />
+        },
+        {
+          key: "productreport",
+          style: { fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '14px', fontWeight: 'bold' },
+          label: t('menu.productreport'),
+          children: null,
+          icon: <TbReportMoney />
         }
       ],
       icon: <MdOutlineLibraryBooks />

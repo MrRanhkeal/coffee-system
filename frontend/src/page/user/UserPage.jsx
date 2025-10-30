@@ -246,6 +246,8 @@ function UserPage() {
                 title={state.isReadOnly ? t('common.view') : (state.isEdit ? t('common.update') : t('common.new'))}
                 onCancel={handleCloseModal}
                 footer={null}
+                maskClosable={false}
+                keyboard={false}    
             >
                 <Form layout="vertical" form={form} onFinish={onFinish}>
                     <Form.Item

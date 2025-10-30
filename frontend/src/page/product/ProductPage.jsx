@@ -421,7 +421,8 @@ function ProductPage() {
           )
         }
         onCancel={onCloseModal}
-
+        maskClosable={false}
+        keyboard={false}    
       >
         <Form
           form={formRef}

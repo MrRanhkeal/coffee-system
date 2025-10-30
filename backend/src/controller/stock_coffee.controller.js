@@ -21,7 +21,7 @@ exports.create = async (req, res) => {
             return res.status(400).json({ status: 'error', message: 'Invalid input' });
         }
 
-        const sqlInsert = "INSERT INTO stock_coffee (product_name, categories, supplier_id, qty,cost,description,status) values(?,?,?,?,?,?,?)";
+        const sqlInsert = "INSERT INTO stock_coffee (product_name, categories, supplier_id, qty,cost,description,status,create_by) values(?,?,?,?,?,?,?,?)";
         //values ($1, $2, $3, $4, $5) RETURNING *
         //RETURNING * for return values from rows affected by insert updata or deleted 
         const data = await db.query(sqlInsert, [
@@ -32,6 +32,7 @@ exports.create = async (req, res) => {
             req.body.cost,
             req.body.description || null, // Optional field
             req.body.status || null, // Optional field
+            req.auth?.name,
         ]);
         res.status(200).json({
             // data: result.rows[0]

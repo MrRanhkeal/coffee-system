@@ -165,7 +165,7 @@ function SaleSummaryPage() {
                         {last_week && (
                             <div style={{ margin: '10px', color: '#0c3e6b', backgroundColor: '#e2e8ecff', borderRadius: 6, fontSize: 20, padding: 18, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', fontWeight: 'bold', textAlign: 'center' }}>
                                 <LiaCalendarWeekSolid />
-                                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.thisweek')}&nbsp;</b>
+                                <b style={{ color: '#2d1817ff', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.lastweek')}&nbsp;</b>
                                 <span style={{ color: '#da2016ff', fontWeight: 'bold' }}>
                                     ${parseFloat((last_week?.total_last_week || summaryPerWeek?.[1]?.total_last_week || summaryPerWeek?.[1]?.total_per_week || '0')).toFixed(2)}
                                 </span>

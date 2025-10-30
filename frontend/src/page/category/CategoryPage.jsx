@@ -123,6 +123,7 @@ function CategoryPage() {
       visibleModal: true,
     });
   };
+
   const onCloseModal = () => {
     formRef.resetFields();
     setState({
@@ -227,6 +228,8 @@ function CategoryPage() {
         title={state.isReadOnly ? t('common.view') : (formRef.getFieldValue("id") ? t('common.update') : t('common.new'))}
         footer={null}
         onCancel={onCloseModal}
+        maskClosable={false}   // Prevent closing when clicking outside
+        keyboard={false}       // Prevent closing with ESC key
       >
         <Form layout="vertical" onFinish={onFinish} form={formRef}>
           <Form.Item

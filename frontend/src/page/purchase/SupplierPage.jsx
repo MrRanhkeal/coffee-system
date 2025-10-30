@@ -190,6 +190,8 @@ function SupplierPage() {
                 footer={null}
                 onCancel={onCloseModal}
                 height={300}
+                maskClosable={false}
+                keyboard={false}    
             >
                 <Form
                     layout="vertical"

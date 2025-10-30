@@ -281,6 +281,8 @@ function Stock_CoffeePage() {
                     </Button>
                 ] : null}
                 width={600}
+                maskClosable={false}
+                keyboard={false}    
             >
                 <Form
                     form={form}

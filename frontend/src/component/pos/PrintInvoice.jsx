@@ -105,8 +105,7 @@ const PrintInvoice = React.forwardRef(({ cart_list = [], objSummary = {}, cashie
                 }
               </h6> 
             </div>
-          </div>
-
+          </div> 
           {/* Customer Details */}
           <div className="invoice-details row">
             <div className="col-6">

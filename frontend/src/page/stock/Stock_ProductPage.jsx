@@ -220,6 +220,7 @@ function Stock_ProductPage() {
             status: record.status,
         });
     }
+    
     //upadte stock current qty + new qty
     const onClickEdit = (record) => {
         form.setFieldsValue({
@@ -278,6 +279,8 @@ function Stock_ProductPage() {
                     </Button>
                 ] : null}
                 width={600}
+                maskClosable={false}
+                keyboard={false}    
             >
                 <Form
                     form={form}

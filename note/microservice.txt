@@ -1,0 +1,56 @@
+microservices-project/
+├── api-gateway/
+│   ├── src/
+│   │   ├── routes/
+│   │   │   ├── user.route.js
+│   │   │   ├── order.route.js
+│   │   │   └── payment.route.js
+│   │   ├── middlewares/
+│   │   │   └── auth.js
+│   │   ├── utils/
+│   │   │   └── response.js
+│   │   └── server.js
+│   ├── package.json
+│   └── .env
+│
+├── user-service/
+│   ├── src/
+│   │   ├── controllers/
+│   │   │   └── user.controller.js
+│   │   ├── routes/
+│   │   │   └── user.routes.js
+│   │   ├── models/
+│   │   │   └── user.model.js
+│   │   ├── services/
+│   │   │   └── auth.service.js
+│   │   └── server.js
+│   ├── package.json
+│   └── .env
+│
+├── order-service/
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── routes/
+│   │   ├── models/
+│   │   └── server.js
+│   ├── package.json
+│   └── .env
+│
+├── payment-service/
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── routes/
+│   │   ├── models/
+│   │   └── server.js
+│   ├── package.json
+│   └── .env
+│
+├── shared/
+│   ├── utils/
+│   │   ├── jwt.js
+│   │   ├── logger.js
+│   │   └── database.js
+│   ├── constants/
+│   └── package.json
+│
+└── docker-compose.yml

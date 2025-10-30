@@ -35,8 +35,11 @@ function RolePage() {
         { label: 'Expense', value: 'expanse' },
         { label: 'Stock', value: 'stock' },
         // reports
-        { label: 'Sale Report', value: 'getsalereport' },
-        { label: 'Sale Summary', value: 'get_sale_summary' },
+        { label: 'Sale Report', value: 'salereport' },
+        { label: 'Sale Summary', value: 'salesummary' },
+        { label: 'Expense Report', value: 'expensereport' },
+        { label: 'Stock Report', value: 'stockreport' },
+        { label: 'Product Report', value: 'productreport' }
     ];
 
     useEffect(() => {
@@ -245,6 +248,8 @@ function RolePage() {
                 onCancel={handleCancel}
                 footer={null}
                 destroyOnClose
+                maskClosable={false}
+                keyboard={false}    
             >
                 <Form
                     form={form}

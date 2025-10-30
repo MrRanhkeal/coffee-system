@@ -58,9 +58,11 @@ function ReportSalePage() {
             title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.orderdate')}</span>,
             dataIndex: 'order_date',
             key: 'order_date',
-            // render: (value) => formatDateClient(value,"DD/MM/YYYY h:mm A")
-            render: (value) => new Date(value).toLocaleDateString("en-GB", { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-            // render: (date) => new Date(date).toLocaleDateString("en-GB", { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+            render: (date) => (
+                <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                    {formatDateClient(date)}
+                </span>
+            ),
         },
         {
             title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.customer')}</span>,
@@ -155,7 +157,7 @@ function ReportSalePage() {
                 pagination={{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20', '50', '100'] }}
                 // pagination={false}
                 scroll={false}
-            />
+            /> 
         </div>
     );
 }

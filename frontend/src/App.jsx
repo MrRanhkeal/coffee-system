@@ -19,7 +19,9 @@ import ProtectedRoute from "./component/protects/ProtectedRoute";
 import StockPage from "./page/stock/StockPage";
 import ReportSalePage from "./page/report/ReportSalePage"; 
 import SaleSummaryPage from "./page/report/SaleSummaryPage"; 
-
+import ReportExpensePage from "./page/report/ReportExpensePage";
+import ReportStockPage from "./page/report/ReportStockPage";
+import ReportProductPage from "./page/report/ReportProductPage";
 function App() {
   return (
     <BrowserRouter>
@@ -45,12 +47,24 @@ function App() {
           <Route path="/currency" element={<ExchangePage />} />
   
           <Route
-            path="/getsalereport"
-            element={<ProtectedRoute permissionKey="getsalereport" element={<ReportSalePage />} />}
+            path="/salereport"
+            element={<ProtectedRoute permissionKey="salereport" element={<ReportSalePage />} />}
           />
           <Route
-            path="/get_sale_summary"
-            element={<ProtectedRoute permissionKey="get_sale_summary" element={<SaleSummaryPage />} />}
+            path="/salesummary"
+            element={<ProtectedRoute permissionKey="salesummary" element={<SaleSummaryPage />} />}
+          />
+          <Route
+            path="/expensereport"
+            element={<ProtectedRoute permissionKey="expensereport" element={<ReportExpensePage />} />}
+          />
+          <Route
+            path="/stockreport"
+            element={<ProtectedRoute permissionKey="stockreport" element={<ReportStockPage />} />}
+          />
+          <Route
+            path="/productreport"
+            element={<ProtectedRoute permissionKey="productreport" element={<ReportProductPage />} />}
           />
           <Route path="*" element={<h1>404-Route Not Found!</h1>} />
         </Route>

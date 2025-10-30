@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useTransition } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Button,
     DatePicker,
@@ -205,7 +205,9 @@ function OrderPage() {
                 title={t('order.table.detail')}
                 footer={null}
                 onCancel={onCloseModal}
-                width={800}
+                width={1000}
+                maskClosable={false}
+                keyboard={false}    
             >
                 <Table
                     style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
