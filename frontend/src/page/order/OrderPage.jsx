@@ -149,7 +149,8 @@ function OrderPage() {
             ...order,
             order_no: order.order_no,
             order_date: order.order_date,
-            customer_id: order.customer_name,
+            customer_id: order.customer_id ?? null, // Allow null for guest
+            customer_name: order.customer_name || 'Guest Customer', // Default label
             payment_method: order.payment_method,
             sub_total: order.sub_total ?? sub_total,
             save_discount: order.save_discount ?? save_discount,
@@ -157,6 +158,19 @@ function OrderPage() {
             total_paid: order.total_paid ?? total, // fallback: assume fully paid
             change: (order.total_paid ?? total) - total, // calculate change
         };
+
+        // return {
+        //     ...order,
+        //     order_no: order.order_no,
+        //     order_date: order.order_date,
+        //     customer_id: order.customer_name,
+        //     payment_method: order.payment_method,
+        //     sub_total: order.sub_total ?? sub_total,
+        //     save_discount: order.save_discount ?? save_discount,
+        //     total: order.total ?? total,
+        //     total_paid: order.total_paid ?? total, // fallback: assume fully paid
+        //     change: (order.total_paid ?? total) - total, // calculate change
+        // };
     })();
 
     return (
@@ -347,16 +361,45 @@ function OrderPage() {
                     },
                     {
                         key: "customer_name",
-                        title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{}{t('order.table.customer')}</span>,
-                        dataIndex: "customer_name",
-                        render: (value, data) => (
-                            <div>
-                                <div style={{ fontWeight: "bold", fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{data.customer_name}</div>
-                                <div style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{data.customer_tel}</div>
-                                <div style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{data.customer_address}</div>
-                            </div>
+                        title: (
+                            <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                                {t('order.table.customer')}
+                            </span>
                         ),
+                        dataIndex: "customer_name",
+                        render: (value, data) => {
+                            const name = data.customer_name || 'Guest Customer';
+                            // const tel = data.customer_tel || '-';
+                            // const address = data.customer_address || '-';
+
+                            return (
+                                <div>
+                                    <div style={{ fontWeight: "bold", fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                                        {name}
+                                    </div>
+                                    {/* <div style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                                        {tel}
+                                    </div>
+                                    <div style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                                        {address}
+                                    </div> */}
+                                </div>
+                            );
+                        },
                     },
+
+                    // {
+                    //     key: "customer_name",
+                    //     title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('order.table.customer')}</span>,
+                    //     dataIndex: "customer_name",
+                    //     render: (value, data) => (
+                    //         <div>
+                    //             <div style={{ fontWeight: "bold", fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{data.customer_name}</div>
+                    //             <div style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{data.customer_tel}</div>
+                    //             <div style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{data.customer_address}</div>
+                    //         </div>
+                    //     ),
+                    // },
                     {
                         key: "total_amount",
                         title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('order.table.total_amount')}</span>,

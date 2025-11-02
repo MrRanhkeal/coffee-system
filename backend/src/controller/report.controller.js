@@ -5,25 +5,45 @@ exports.getSalereport = async (req, res) => {
         const from_date = req.query.from_date;
         const to_date = req.query.to_date;
         let sqlgetSale =
-            "SELECT " +
-            " o.order_no, " +
-            " o.create_at AS order_date, " +
-            " o.total_amount, " +
-            " o.paid_amount," +
-            " o.payment_method, " +
-            " c.name AS customer_name, " +
-            " u.name AS user_name, " +
-            " p.name AS product_name, " +
-            " od.qty, " +
-            " od.price AS product_price_at_order, " +
-            " od.discount AS order_detail_discount, " +
-            " od.total AS order_detail_total, " +
-            " p.brand AS product_brand " +
-            " FROM orders o " +
-            " JOIN order_detail od ON o.id = od.order_id " +
-            " JOIN products p ON od.product_id = p.id " +
-            " LEFT JOIN customers c ON o.customer_id = c.id " +
-            " LEFT JOIN users u ON o.user_id = u.id WHERE 1=1 ";
+            `SELECT
+                o.order_no,
+                o.create_at AS order_date,
+                o.total_amount,
+                o.paid_amount,
+                o.payment_method,
+                c.name AS customer_name,
+                u.name AS user_name,
+                p.name AS product_name,
+                od.qty,
+                od.price AS product_price_at_order,
+                od.discount AS order_detail_discount,
+                (od.price - (od.price * od.discount / 100)) AS order_detail_total,
+                p.brand AS product_brand
+            FROM orders o
+            JOIN order_detail od ON o.id = od.order_id
+            JOIN products p ON od.product_id = p.id
+            LEFT JOIN customers c ON o.customer_id = c.id
+            LEFT JOIN users u ON o.user_id = u.id
+            WHERE 1=1 `;
+            // "SELECT " +
+            // " o.order_no, " +
+            // " o.create_at AS order_date, " +
+            // " o.total_amount, " +
+            // " o.paid_amount," +
+            // " o.payment_method, " +
+            // " c.name AS customer_name, " +
+            // " u.name AS user_name, " +
+            // " p.name AS product_name, " +
+            // " od.qty, " +
+            // " od.price AS product_price_at_order, " +
+            // " od.discount AS order_detail_discount, " +
+            // " od.total AS order_detail_total, " +
+            // " p.brand AS product_brand " +
+            // " FROM orders o " +
+            // " JOIN order_detail od ON o.id = od.order_id " +
+            // " JOIN products p ON od.product_id = p.id " +
+            // " LEFT JOIN customers c ON o.customer_id = c.id " +
+            // " LEFT JOIN users u ON o.user_id = u.id WHERE 1=1 ";
 
         let sqlParam = {};
         if (!isEmpty(from_date) && !isEmpty(to_date)) {

@@ -103,7 +103,8 @@
 }
 
 .discountPrice {
-    color: #52c41a;
-    font-size: 0.75rem;
+    color: #06995c;
+    font-size: 1rem;
     margin-top: 0.25rem;
+    font-weight: bold;
 }

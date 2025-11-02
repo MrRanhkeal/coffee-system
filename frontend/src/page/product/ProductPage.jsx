@@ -705,9 +705,16 @@ function ProductPage() {
           },
           {
             key: "discount",
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('product.table.discount')}</span>,
+            title: (
+              <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                {t('product.table.discount')}
+              </span>
+            ),
             dataIndex: "discount",
-            render: (price) => "$" + parseFloat(price).toFixed(2),
+            render: (discount) =>
+              discount !== undefined && discount !== null
+                ? `${(parseFloat(discount) * 1).toFixed(2)}%`
+                : "0%",
           },
           {
             key: "status",

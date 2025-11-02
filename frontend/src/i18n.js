@@ -51,7 +51,7 @@ const resources = {
         product: 'Product',
         category: 'Category',
         customer: 'Customer',
-        order: 'Order',
+        order: 'Orders',
         supplier: 'Supplier',
         expense: 'Expense',
         stock: 'Stock',
@@ -98,7 +98,7 @@ const resources = {
         labels: {
           name: 'Product Name',
           brand: 'Brand',
-          discount: 'Discount',
+          discount: 'Discount (%)',
           category: 'Category',
           price: 'Price',
           status: 'Status',
@@ -159,7 +159,7 @@ const resources = {
           discount: 'Discount',
           total: 'Total',
           filter: 'Filter',
-          orders: 'Order',
+          orders: 'Orders',
           total_orders: 'Total Order',
           bong: 'Bong'
         },
@@ -197,7 +197,7 @@ const resources = {
           discount: 'Discount',
           total: 'Total',
           filter: 'Filter',
-          orders: 'Order',
+          orders: 'Orders',
           total_orders: 'Total Order',
           bong: 'Bong'
         },
@@ -988,7 +988,7 @@ const resources = {
         labels: {
           name: 'ឈ្មោះទំនិញ',
           brand: 'ម៉ាក/Brand',
-          discount: 'បញ្ចុះតម្លៃ',
+          discount: 'បញ្ចុះតម្លៃ (%)',
           category: 'ប្រភេទទំនិញ',
           price: 'តម្លៃលក់',
           status: 'ស្ថានភាព',

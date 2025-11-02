@@ -20,6 +20,11 @@
   text-decoration: line-through;
   margin-right: 5px;
 }
+.p_priceis{
+  text-decoration: line-through;
+    margin-right: 5px;
+    color: rgb(63, 58, 58);
+}
 .p_dis {
   color: red;
   font-weight: bold;
@@ -29,6 +34,7 @@
   font-weight: bold;
   color: green;
   margin-right: 5px;
+  /* font-weight: bold; */
 }
 .p_price_container {
   margin-top: 5px;

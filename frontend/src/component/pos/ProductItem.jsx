@@ -3,14 +3,14 @@ import React from "react";
 import { Config } from "../../util/config";
 import styles from "./ProductItem.module.css";
 import { MdAddCircle } from "react-icons/md";
-import PropTypes from "prop-types"; 
+import PropTypes from "prop-types";
 import { RiAddLargeLine } from "react-icons/ri";
 import { useTranslation } from 'react-i18next';
 function ProductItem({
   id,
   name,
   description,
-  image, 
+  image,
   images = [], // new prop for multiple images, default to empty array
   category_name,
   brand,
@@ -20,7 +20,7 @@ function ProductItem({
   handleAdd,
   qty,
 }) {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [sugarLevel, setSugarLevel] = React.useState(0);
   const [modalOpen, setModalOpen] = React.useState(false);
   const imageList = images.length > 0 ? images : [image];
@@ -79,8 +79,10 @@ function ProductItem({
         centered
         width={400}
         height={450}
+        maskClosable={false}
+        keyboard={false}
       >
-        <div style={{ 
+        <div style={{
           // width: '100%',
           // height: '100%',
           display: 'flex',
@@ -99,8 +101,35 @@ function ProductItem({
                 {name} &nbsp;
                 {description}
               </div>
-              <div style={{ fontWeight: 'bold', color: 'green', marginRight: '5px' }}>${price} &nbsp;&nbsp;&nbsp; <span style={{ color: 'red', fontWeight: 'bold', marginRight: '5px' }}> {discount}%</span> <span style={{ color: 'red', fontSize: '12px' }}>off</span><br /></div>
-              <span style={{ color: 'black', fontSize: '14px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold' }}>{t('productItem.labels.onecup')}</span>
+              <div style={{ fontWeight: 'bold', color: 'green', marginRight: '5px' }}>
+                {discount != 0 && discount != null ? (
+                  <div className={styles.p_price_container}>
+                    <div className={styles.p_priceis}>{price}$</div>
+                    <div className={styles.p_final_price}> {final_price}$</div>&nbsp;&nbsp;&nbsp;
+                    <span style={{ color: 'red', fontWeight: 'bold', marginRight: '5px' }}>
+                      {discount}%
+                    </span>
+                    <span style={{ color: 'red', fontSize: '12px' }}>
+                      off
+                    </span> 
+                  </div>
+                ) : (
+                  <div className={styles.p_price_container} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', margin: '0 0 10px 6px' }}>{t('productItem.labels.price')} &nbsp;&nbsp;
+                    <div className={styles.p_final_price}>${price}</div> 
+                  </div>
+                )}
+                {/* ${price}  */}
+                &nbsp;&nbsp;&nbsp;
+                <span style={{ color: 'black', fontSize: '14px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold' }}>{t('productItem.labels.onecup')}</span>
+                {/* <span style={{ color: 'red', fontWeight: 'bold', marginRight: '5px' }}>
+                  {discount}%
+                </span>
+                <span style={{ color: 'red', fontSize: '12px' }}>
+                  off
+                </span>   */}
+                <br />  
+              </div>
+              {/* <span style={{ color: 'black', fontSize: '14px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold' }}>{t('productItem.labels.onecup')}</span> */}
             </div>
             {imageList.length > 1 && (
               <>
@@ -121,7 +150,7 @@ function ProductItem({
           <br />
           <br />
           <div style={{ marginTop: 16, width: '100%', backgroundColor: '#ebd4d1ff', borderRadius: '5px' }}>
-            <span style={{ fontSize: '14px', margin: '30px 10px 30px 10px', fontWeight: 'bold',fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'}}>{t('productItem.labels.choosesugar')}</span>
+            <span style={{ fontSize: '14px', margin: '30px 10px 30px 10px', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('productItem.labels.choosesugar')}</span>
             <br />
             <span style={{ margin: '10px 0 0 10px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('productItem.labels.choseone')} <text style={{ marginLeft: '210px', backgroundColor: '#dc7970ff', borderRadius: '10px', width: '100px', padding: '5px', color: 'white', fontSize: '12px', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('productItem.labels.needed')}</text></span>
             <br />
@@ -130,14 +159,14 @@ function ProductItem({
               value={sugarLevel}
               onChange={(e) => setSugarLevel(e.target.value)}
               //style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center' }}
-              style={{ display: 'grid', flexWrap: 'wrap', gap: '2px' ,margin:'0 0 15px 0'}}
+              style={{ display: 'grid', flexWrap: 'wrap', gap: '2px', margin: '0 0 15px 0' }}
             >
-              <Radio style={{ marginLeft: '6px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} value={0}>{t('productItem.labels.sugar0')} <text style={{ marginLeft: '190px',color: '#e90b0bff' }}>{t('productItem.labels.free')}</text></Radio>
-              <Radio style={{ marginLeft: '6px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} value={10}>{t('productItem.labels.sugar10')} <text style={{ marginLeft: '180px',color: '#e90b0bff' }}>{t('productItem.labels.free')}</text></Radio>
-              <Radio style={{ marginLeft: '6px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} value={25}>{t('productItem.labels.sugar25')} <text style={{ marginLeft: '180px',color: '#e90b0bff' }}>{t('productItem.labels.free')}</text></Radio>
-              <Radio style={{ marginLeft: '6px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} value={50}>{t('productItem.labels.sugar50')} <text style={{ marginLeft: '180px' ,color: '#e90b0bff'}}>{t('productItem.labels.free')}</text></Radio>
-              <Radio style={{ marginLeft: '6px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} value={75}>{t('productItem.labels.sugar75')} <text style={{ marginLeft: '178px',color: '#e90b0bff' }}>{t('productItem.labels.free')}</text></Radio>
-              <Radio style={{ marginLeft: '6px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} value={100}>{t('productItem.labels.sugar100')} <text style={{ marginLeft: '170px',color: '#e90b0bff' }}>{t('productItem.labels.free')}</text></Radio>
+              <Radio style={{ marginLeft: '6px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} value={0}>{t('productItem.labels.sugar0')} <text style={{ marginLeft: '190px', color: '#e90b0bff' }}>{t('productItem.labels.free')}</text></Radio>
+              <Radio style={{ marginLeft: '6px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} value={10}>{t('productItem.labels.sugar10')} <text style={{ marginLeft: '180px', color: '#e90b0bff' }}>{t('productItem.labels.free')}</text></Radio>
+              <Radio style={{ marginLeft: '6px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} value={25}>{t('productItem.labels.sugar25')} <text style={{ marginLeft: '180px', color: '#e90b0bff' }}>{t('productItem.labels.free')}</text></Radio>
+              <Radio style={{ marginLeft: '6px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} value={50}>{t('productItem.labels.sugar50')} <text style={{ marginLeft: '180px', color: '#e90b0bff' }}>{t('productItem.labels.free')}</text></Radio>
+              <Radio style={{ marginLeft: '6px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} value={75}>{t('productItem.labels.sugar75')} <text style={{ marginLeft: '178px', color: '#e90b0bff' }}>{t('productItem.labels.free')}</text></Radio>
+              <Radio style={{ marginLeft: '6px', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }} value={100}>{t('productItem.labels.sugar100')} <text style={{ marginLeft: '170px', color: '#e90b0bff' }}>{t('productItem.labels.free')}</text></Radio>
               <br />
               <br />
               <br />
@@ -152,16 +181,16 @@ function ProductItem({
           >discription </div> */}
           <Button
             type="primary"
-            style={{ marginTop: 16, width: '100%',fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
+            style={{ marginTop: 16, width: '100%', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
             icon={<MdAddCircle />}
             //icon=<IoMdAdd />
-            onClick={handleAddWithSugar}  
+            onClick={handleAddWithSugar}
           >
             {t('productItem.labels.addtocart')}
           </Button>
         </div>
       </Modal>
-      <div className={styles.p_name + " truncate-text"} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' ,margin:'0 0 0 6px'}}>
+      <div className={styles.p_name + " truncate-text"} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', margin: '0 0 0 6px' }}>
         {name}
         {/* {description} */}
       </div>
@@ -181,7 +210,7 @@ function ProductItem({
           <div className={styles.p_final_price}> {final_price}$</div>
         </div>
       ) : (
-          <div className={styles.p_price_container} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', margin: '0 0 10px 6px' }}>{t('productItem.labels.price')} &nbsp;&nbsp;
+        <div className={styles.p_price_container} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', margin: '0 0 10px 6px' }}>{t('productItem.labels.price')} &nbsp;&nbsp;
           <div className={styles.p_final_price}>${price}</div>
         </div>
       )}
@@ -202,9 +231,9 @@ function ProductItem({
         <Button
           // onClick={handleAddWithSugar}
           onClick={handleImageClick}
-          style={{ color: '#0f9225ff', fontSize: '25px', backgroundColor:'#fdfdffff', border:'none', cursor: 'pointer' }}
-          type="primary" 
-          icon=<RiAddLargeLine/> 
+          style={{ color: '#0f9225ff', fontSize: '25px', backgroundColor: '#fdfdffff', border: 'none', cursor: 'pointer' }}
+          type="primary"
+          icon=<RiAddLargeLine />
         />
         {/* <RiAddLargeLine 
           onClick={handleImageClick}
@@ -227,7 +256,7 @@ ProductItem.propTypes = {
   discount: PropTypes.number,
   // barcode: PropTypes.string.isRequired,
   handleAdd: PropTypes.func.isRequired,
-  qty: PropTypes.number.isRequired, 
+  qty: PropTypes.number.isRequired,
 };
 
 export default ProductItem;

@@ -1,0 +1,2 @@
+SyntaxError: Unexpected identifier 'sqlParam' + 2025-11-01 18:06:10 
+SyntaxError: Unexpected identifier 'sqlParam' + 2025-11-01 18:06:13 

@@ -125,7 +125,7 @@ function CartView({
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
                         <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('cart.labels.discount')}</span>
-                        <span>${objSummary.save_discount.toFixed(2)}</span>
+                        <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif'}}>${objSummary.save_discount.toFixed(2)}</span>
                     </div>
                     <div style={{
                         display: 'flex',
@@ -135,13 +135,13 @@ function CartView({
                         color: '#090d11ff'
                     }}>
                         <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontWeight: 'bold' }}>{t('cart.labels.total')}</span>
-                        <span>${objSummary.total.toFixed(2)}</span>
+                        <span >${objSummary.total.toFixed(2)}</span>
                     </div>
                 </div>
                 <div>
                     <div style={{ marginBottom: '1rem' }}>
                         <label style={{ fontWeight: 'bold', marginBottom: '4px', display: 'block', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('cart.labels.customer')}</label>
-                        <Select
+                        {/* <Select
                             style={{ width: '100%', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
                             //isRequired:false
                             value={objSummary.customer_id || undefined}
@@ -155,7 +155,30 @@ function CartView({
                                 value: cust.value,
                                 label: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{cust.label}</span>
                             }))}
-                        />
+                        /> */}
+
+                        <Select
+                            style={{ width: '100%', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}
+                            value={objSummary.customer_id ?? null} // Allow null as a valid value
+                            placeholder={t('cart.placeholders.customer')}
+                            onChange={(value) =>
+                                setObjSummary((prev) => ({
+                                    ...prev,
+                                    customer_id: value ?? null, // store null for guest
+                                }))
+                            }
+                            options={[
+                                { value: null, label: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>Guest</span> },
+                                ...customers.map((cust) => ({
+                                    value: cust.value,
+                                    label: (
+                                        <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                                            {cust.label}
+                                        </span>
+                                    ),
+                                })),
+                            ]}
+                        /> 
                     </div>
                     <div style={{ marginBottom: '1rem' }}>
                         <label style={{ fontWeight: 'bold', marginBottom: '4px', display: 'block', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('cart.labels.paymentmethod')}</label>

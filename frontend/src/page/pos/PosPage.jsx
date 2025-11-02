@@ -497,20 +497,36 @@ function PosPage() {
                 sugarLevel: item.sugarLevel
             }));
 
+            //allow null for customers or guest
             const param = {
                 order: {
                     total_amount: objSummary.total,
                     paid_amount: isQR ? 0 : objSummary.total_paid,
                     total_qty: objSummary.total_qty,
                     save_discount: objSummary.save_discount,
-                    customer_id: objSummary.customer_id || 'Guest',
+                    customer_id: objSummary.customer_id || null, // Allow null for guest
                     customer_name: objSummary.customer_name || 'Guest',
                     payment_method: objSummary.payment_method || 'Cash',
                     remark: objSummary.remark || '',
                 },
                 order_details: order_details,
             };
-
+            //don't allow null for customers
+            // //check
+            // const param = {
+            //     order: {
+            //         total_amount: objSummary.total,
+            //         paid_amount: isQR ? 0 : objSummary.total_paid,
+            //         total_qty: objSummary.total_qty,
+            //         save_discount: objSummary.save_discount,
+            //         customer_id: objSummary.customer_id || 'Guest',
+            //         customer_name: objSummary.customer_name || 'Guest',
+            //         payment_method: objSummary.payment_method || 'Cash',
+            //         remark: objSummary.remark || '',
+            //     },
+            //     order_details: order_details,
+            // };
+            // //check
             const res = await request("order", "post", param);
 
             if (res && !res.error) {
@@ -615,13 +631,21 @@ function PosPage() {
             <div style={{ display: "none" }}>
                 <PrintInvoice
                     ref={refInvoice}
-                    cart_list={state.cart_list}
+                    cart_list={state.cart_list} 
                     objSummary={{
                         ...objSummary,
-                        // customer_id: objSummary.customer_id ? String(objSummary.customer_id) : "VIP Customer",
-                        //customer_id: objSummary.customer_id ? String(objSummary.customer_id ?? "VIP Customer") : "VIP Customer",
-                        customer_id: objSummary.customer_name ? String(objSummary.customer_name ?? "VIP Customer") : "VIP Customer",
+                        customer_id:
+                            objSummary.customer_id !== undefined && objSummary.customer_id !== null
+                                ? String(objSummary.customer_id)
+                                : null, // allow null for guest
+                        customer_name: objSummary.customer_name || 'Guest Customer', // fallback display only
                     }}
+                    // objSummary={{
+                    //     ...objSummary,
+                    //     // customer_id: objSummary.customer_id ? String(objSummary.customer_id) : "VIP Customer",
+                    //     //customer_id: objSummary.customer_id ? String(objSummary.customer_id ?? "VIP Customer") : "VIP Customer",
+                    //     customer_id: objSummary.customer_name ? String(objSummary.customer_name ?? "VIP Customer") : "VIP Customer",
+                    // }}
                     cashier={profile?.name || 'System'}
                 // ...other props
                 />
@@ -645,6 +669,8 @@ function PosPage() {
                 title="Scan to Pay (KHQR)"
                 destroyOnClose
                 centered
+                maskClosable={false}
+                keyboard={false}  
             >
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
                     <div style={{ position: 'relative', display: 'inline-block' }}>

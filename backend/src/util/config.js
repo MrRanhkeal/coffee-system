@@ -8,7 +8,7 @@ module.exports = {
             HOST: 'localhost',
             USER: 'root',
             PASSWORD: 'root',
-            DATABASE: 'mycoffee',
+            DATABASE: 'saronadb',
             PORT: 5306
         },
         token: {

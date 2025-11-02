@@ -5,7 +5,10 @@ import Logo from "../../assets/v-friends.jpg";
 const PrintInvoice = React.forwardRef(({ cart_list = [], objSummary = {}, cashier = '' }, ref) => {
   // Get customer name from objSummary, handle both direct name and customer object
   //const customerName = typeof objSummary?.customer_name === 'string' ? objSummary.customer_name : 'Guest';
-  const customerDisplay = typeof objSummary?.customer_id === 'string' ? objSummary.customer_id : 'Customer VIP';
+  //const customerDisplay = typeof objSummary?.customer_id === 'string' ? objSummary.customer_id : 'Customer VIP';
+  const customerDisplay =
+    objSummary?.customer_name ||
+    (typeof objSummary?.customer_id === 'string' ? objSummary.customer_id : 'Guest Customer');
 
   // Get payment method from objSummary
   const paymentMethod = objSummary?.payment_method || 'Cash';
@@ -110,7 +113,7 @@ const PrintInvoice = React.forwardRef(({ cart_list = [], objSummary = {}, cashie
           <div className="invoice-details row">
             <div className="col-6">
               <h5>Bill To:</h5>
-              <h6>Customer: {customerDisplay}</h6>
+              <h6>Customer: {customerDisplay}</h6> 
               <h6>Payment Method: {paymentMethod}</h6>
             </div>
             <div className="col-6 text-end">
@@ -160,7 +163,7 @@ const PrintInvoice = React.forwardRef(({ cart_list = [], objSummary = {}, cashie
                     <h6 className="mb-2">Cashier:</h6>
                   </div>
                   <div className="col-5 text-end">
-                    <h6 className="mb-2">{customerDisplay}</h6>
+                    <h6 className="mb-2">{customerDisplay}</h6> 
                     <h6 className="mb-2">{paymentMethod}</h6>
                     <h6 className="mb-2">{cashierName}</h6>
                   </div>

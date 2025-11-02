@@ -65,11 +65,31 @@ function ReportSalePage() {
             ),
         },
         {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.customer')}</span>,
+            title: (
+                <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                    {t('report.labels.customer')}
+                </span>
+            ),
             dataIndex: 'customer_name',
             key: 'customer_name',
-            render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
+            render: (text, record) => {
+                const displayName =
+                    record?.customer_name ||
+                    (record?.customer_id ? String(record.customer_id) : 'Guest Customer');
+
+                return (
+                    <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
+                        {displayName}
+                    </span>
+                );
+            },
         },
+        // {
+        //     title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.customer')}</span>,
+        //     dataIndex: 'customer_name',
+        //     key: 'customer_name',
+        //     render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
+        // },
         {
             title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.cashier')}</span>,
             dataIndex: 'user_name',
@@ -83,6 +103,37 @@ function ReportSalePage() {
             render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
         },
         {
+            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.brand')}</span>,
+            dataIndex: 'product_brand',
+            key: 'product_brand',
+            render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
+        },
+        // {
+        //     title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.qty')}</span>,
+        //     dataIndex: 'qty',
+        //     key: 'qty',
+        //     render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
+        // },
+        // {
+        //     title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.price')}</span>,
+        //     dataIndex: 'product_price_at_order',
+        //     key: 'product_price_at_order',
+        //     render: (value) =>' $'+parseFloat(value).toFixed(2) 
+        // },
+        // {
+        //     title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.discount')}</span>,
+        //     dataIndex: 'order_detail_discount',
+        //     key: 'order_detail_discount',
+        //     render: (value) =>parseFloat(value).toFixed(2) + '%'
+        // },
+        
+        // {
+        //     title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.total')}</span>,
+        //     dataIndex: 'order_detail_total',
+        //     key: 'order_detail_total',
+        //     render: (value) =>' $'+parseFloat(value).toFixed(2) 
+        // },   
+        {
             title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.qty')}</span>,
             dataIndex: 'qty',
             key: 'qty',
@@ -92,26 +143,26 @@ function ReportSalePage() {
             title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.price')}</span>,
             dataIndex: 'product_price_at_order',
             key: 'product_price_at_order',
-            render: (value) =>' $'+parseFloat(value).toFixed(2) 
+            render: (value) => '$' + parseFloat(value).toFixed(2),
         },
         {
             title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.discount')}</span>,
             dataIndex: 'order_detail_discount',
             key: 'order_detail_discount',
-            render: (value) =>parseFloat(value).toFixed(2) + '%'
-        },
-        {
-            title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.brand')}</span>,
-            dataIndex: 'product_brand',
-            key: 'product_brand',
-            render: (text) => <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{text}</span>,
+            render: (value) => parseFloat(value).toFixed(2) + '%',
         },
         {
             title: <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('report.labels.total')}</span>,
-            dataIndex: 'order_detail_total',
             key: 'order_detail_total',
-            render: (value) =>' $'+parseFloat(value).toFixed(2) 
+            render: (_, record) => {
+                const price = parseFloat(record.product_price_at_order) || 0;
+                const discount = parseFloat(record.order_detail_discount) || 0;
+                const qty = parseFloat(record.qty) || 0;
+                const total = qty * (price - (price * discount / 100));
+                return '$' + total.toFixed(2);
+            },
         },
+
     ];
     
     return (
