@@ -52,3 +52,9 @@
 
 # Requirments 
 node.js veresions 16+ or release version 
+
+
+# Databse 
+   Relational Database Management System (RDBMS)
+
+# 
