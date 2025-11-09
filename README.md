@@ -62,18 +62,18 @@ node.js veresions 16+ or release version
    Cash Pay
    Bakong Pay : Local Bank
 # Register API base
-```cmd
-   {
-      "role_id" :1, <!--admin-->
-      "name" : "Ranh", <!--your name-->
-       "username" : "kealranh@gmail.com", <!--your email -->
-      "password" : "123456"
-   }
+   ```cmd
+      {
+         "role_id" :1, <!--admin-->
+         "name" : "Ranh", <!--your name-->
+         "username" : "kealranh@gmail.com", <!--your email -->
+         "password" : "123456"
+      }
 
 # Register API base
-```cmd
-   {
-      "username" : "kealranh@gmail.com", <!--email registerd-->
-      "password" : "123456"
-   }
+   ```cmd
+      {
+         "username" : "kealranh@gmail.com", <!--email registerd-->
+         "password" : "123456"
+      }
 
