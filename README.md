@@ -54,7 +54,9 @@
 node.js veresions 16+ or release version  
    1. Server : Node + Express + DB(Relational) + JWT
    2. Client : React + Antd + Bootstrap
-
+   ## more detail :
+      https://nodejs.org/en
+      
 # Databse 
    Relational Database Management System (RDBMS)
 
@@ -63,7 +65,7 @@ node.js veresions 16+ or release version
 2. Bakong Pay : Local Bank 
 
 # Login
-   "username" : "kealranh@gmail.com", <!--your email registered-->
+   "username" : "kealranh@gmail.com", <!--your email registered--> ␣␣
    "password" : "123456"
 
 # Register API base
