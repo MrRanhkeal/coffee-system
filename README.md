@@ -65,8 +65,11 @@ node.js veresions 16+ or release version
 2. Bakong Pay : Local Bank 
 
 # Login
-   "username" : "kealranh@gmail.com", <!--your email registered--> ␣␣
-   "password" : "123456"
+   {
+      "username" : "kealranh@gmail.com", <!--your email registered-->.
+      "password" : "123456"
+   }
+   
 
 # Register API base
 ```cmd
