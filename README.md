@@ -51,9 +51,9 @@
 
 
 # Requirments 
-node.js veresions 16+ or release version 
-   -Server : Node + Express + DB(Relational) + JWT
-   -Client : React + Antd
+node.js veresions 16+ or release version  
+   1. Server : Node + Express + DB(Relational) + JWT
+   2. Client : React + Antd + Bootstrap
 
 # Databse 
    Relational Database Management System (RDBMS)
