@@ -52,9 +52,28 @@
 
 # Requirments 
 node.js veresions 16+ or release version 
-
+   -Server : Node + Express + DB(Relational) + JWT
+   -Client : React + Antd
 
 # Databse 
    Relational Database Management System (RDBMS)
 
-# 
+# Payment Gateway 
+   Cash Pay
+   Bakong Pay : Local Bank
+# Register API base
+```cmd
+   {
+      "role_id" :1, <!--admin-->
+      "name" : "Ranh", <!--your name-->
+       "username" : "kealranh@gmail.com", <!--your email -->
+      "password" : "123456"
+   }
+
+# Register API base
+```cmd
+   {
+      "username" : "kealranh@gmail.com", <!--email registerd-->
+      "password" : "123456"
+   }
+

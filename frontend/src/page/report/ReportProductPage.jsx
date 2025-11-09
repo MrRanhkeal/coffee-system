@@ -127,7 +127,7 @@ function ReportProductPage() {
 
     return (
         <div>
-            <h2 style={{ fontSize: 20, fontWeight: 'bold', color: '#e35214', marginBottom: 16 }}>
+            <h2 style={{ fontSize: 20, fontWeight: 'bold', color: '#e35214', marginBottom: 16, fontFamily: 'Khmer OS Muol Light' }}>
                 {t('productReport.title')}
             </h2>
 
@@ -149,7 +149,7 @@ function ReportProductPage() {
                     }}
                 />
                 <Button type="primary" onClick={getProductReport} style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
-                    <FaSearch /> {t('common.filter')}
+                    <FaSearch  /> {t('common.filter')}
                 </Button>
                 <div style={{ marginLeft: '50px', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif', fontSize: '26px' }}>
                     {t('productReport.table.totalcost')}: ${totalCost.toFixed(2)}

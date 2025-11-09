@@ -40,8 +40,7 @@ function ReportStockPage() {
                             : [];
 
                 if (list.length === 0) {
-                    setData([]);
-                    message.info('No data found for selected dates.');
+                    setData([]); 
                     return;
                 }
 

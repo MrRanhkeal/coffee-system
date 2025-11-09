@@ -34,8 +34,7 @@ function ReportSalePage() {
             } else if (res && Array.isArray(res)) {
                 setData(res);
             } else {
-                setData([]);
-                message.info('No data found for selected dates.');
+                setData([]); 
             }
         } catch (err) {
             message.error('Failed to get report.', err);
