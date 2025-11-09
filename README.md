@@ -55,12 +55,12 @@ node.js veresions 16+ or release version
    1. Server : Node + Express + DB(Relational) + JWT
    2. Client : React + Antd + Bootstrap
    ## more details :
-   1. https://react.dev/learn/build-a-react-app-from-scratch
-   2. https://ant.design/components/overview 
-   3. https://getbootstrap.com/docs/5.3/getting-started/introduction/
-   4. https://nodejs.org/en
-   5.https://expressjs.com/
-   6.https://www.npmjs.com/package/mysql2#documentation
+   1. React: https://react.dev/learn/build-a-react-app-from-scratch
+   2. React Libraries: https://ant.design/components/overview 
+   3. BootStrap: https://getbootstrap.com/docs/5.3/getting-started/introduction/
+   4. Node.js: https://nodejs.org/en
+   5. Express: https://expressjs.com/
+   6. MySQL: https://www.npmjs.com/package/mysql2#documentation
       
 # Databse 
    Relational Database Management System (RDBMS)
