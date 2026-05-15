@@ -13,6 +13,7 @@ import { getProfile } from "../../store/profile.store";
 import { FiSearch } from "react-icons/fi";
 import { QRCodeSVG } from "qrcode.react";
 import { useTranslation } from "react-i18next";
+import './../main.css';
 function PosPage() {
     const { Text } = Typography;
     const { t } = useTranslation();
@@ -450,6 +451,10 @@ function PosPage() {
             description: 'The KHQR has expired. Please try again.',
             placement: 'top'
         });
+        // Small delay then regenerate
+        setTimeout(() => {
+            handleClickOut();
+        }, 1500);
     }, []);
 
     const handleForceComplete = useCallback(async () => {
@@ -468,6 +473,30 @@ function PosPage() {
             setForceLoading(false);
         }
     }, [qrModal.md5, finalizeSuccess]);
+
+    // const handleClickOut = useCallback(async () => {
+    //     const isQR = (objSummary.payment_method || 'Cash') === 'QR';
+    //     if (isQR) {
+    //         if (pollRef.current) clearInterval(pollRef.current);
+    //         if (timerRef.current) clearInterval(timerRef.current);
+    //         setQrModal((m) => ({ ...m, status: 'pending' }));
+    //     } else {
+    //         if (!objSummary.total_paid) {
+    //             notification.error({
+    //                 message: "Insufficient Payment",
+    //                 description: "Paid amount is not sufficient, please check again!",
+    //                 placement: "top",
+    //                 style: {
+    //                     backgroundColor: "#ece5e5ff",
+    //                     outline: "1px solid #ff4d4f",
+    //                 },
+    //             });
+    //             return;
+    //         }
+    //         handleClickOut();
+    //     }
+
+    // }, );
 
     const handleClickOut = async () => {
         const isQR = (objSummary.payment_method || 'Cash') === 'QR';
@@ -624,6 +653,7 @@ function PosPage() {
             });
         }
     };
+    
     // moved print handlers above
 
     return (
@@ -697,7 +727,7 @@ function PosPage() {
                             <span style={{ color: 'red', fontWeight: 'bold', fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>{t('pos.labels.qrexpire')}</span>
                         ) : (
                             <span style={{ fontFamily: 'Noto Sans Khmer, Roboto, sans-serif' }}>
-                                {t('pos.labels.expirein')}: {Math.max(0, Math.floor(qrRemainMs / 1000))}{t('pos.labels.second')}
+                                {t('pos.labels.expirein')}: {Math.max(0, Math.floor(qrRemainMs / 2000))}{t('pos.labels.second')}
                             </span>
                         )}
                     </div>

@@ -5,12 +5,12 @@ import { setAcccessToken, setPermission, setProfile } from "../../store/profile.
 import { useNavigate } from "react-router-dom";
 import { LoginOutlined, EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { FcLock } from "react-icons/fc";
-import { FcBusinessman } from "react-icons/fc"; 
+import { FcBusinessman } from "react-icons/fc";
 // import "./LoginPage.css";
 import backgroundImage from '../../assets/coffee_Image_backgorund.png';
 import './LoginPage.css';
 import { useTranslation } from "react-i18next";
-function LoginPage() { 
+function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ function LoginPage() {
   }, []);
   return (
     <div className="login-page" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-      
+
       <Form
         form={form}
         name="login"
@@ -54,7 +54,7 @@ function LoginPage() {
         size="large"
         className="login-form"
       >
-        <h2 
+        <h2
           style={{
             color: "#eef2f0",
             fontSize: "40px",
@@ -63,7 +63,7 @@ function LoginPage() {
             margin: "0 0 20px 0",
             fontFamily: 'Noto Sans Khmer, Roboto, sans-serif',
           }}
-        > 
+        >
           {t('login.titles')}
         </h2>
 
@@ -71,7 +71,7 @@ function LoginPage() {
         <Form.Item
           name="username"
           type="email"
-          rules={[{ required: true, message: t('validation.username_required') }]} 
+          rules={[{ required: true, message: t('validation.username_required') }]}
         >
           <div className="input-field" type='email'>
             <i>
@@ -80,16 +80,16 @@ function LoginPage() {
             <input
               type="email"
               placeholder="@gmail.com"
-              autoComplete="email" 
+              autoComplete="email"
               style={{
-                fontFamily: "Noto Sans Khmer, Roboto, sans-serif", 
+                fontFamily: "Noto Sans Khmer, Roboto, sans-serif",
                 margin: "0 0 0 20px",
-                color: "#ffffffff",  
+                color: "#ffffffff",
               }}
-            /> 
+            />
             <label
               style={{
-                fontFamily: "Noto Sans Khmer, Roboto, sans-serif", 
+                fontFamily: "Noto Sans Khmer, Roboto, sans-serif",
                 fontWeight: "bold",
                 margin: "0 0 0 10px",
                 color: "hsl(0, 0%, 100%)",
@@ -112,9 +112,9 @@ function LoginPage() {
               placeholder=" "
               autoComplete="current-password"
               style={{
-                fontFamily: "Noto Sans Khmer, Roboto, sans-serif", 
-                margin: "0 0 0 20px", 
-                color: "#ffffffff", 
+                fontFamily: "Noto Sans Khmer, Roboto, sans-serif",
+                margin: "0 0 0 20px",
+                color: "#ffffffff",
               }}
             />
             <label
@@ -126,7 +126,7 @@ function LoginPage() {
               }}
             >
               {t('login.password')}
-            </label> 
+            </label>
             {/* Toggle eye icon */}
             <span
               onClick={() => setShowPassword(!showPassword)}
@@ -142,7 +142,7 @@ function LoginPage() {
               }}
             >
               {showPassword ? <EyeTwoTone /> : <EyeInvisibleOutlined />}
-            </span> 
+            </span>
 
             {/* Toggle eye icon */}
             <span
@@ -154,8 +154,8 @@ function LoginPage() {
                 transform: "translateY(-50%)",
                 cursor: "pointer",
                 fontSize: "18px",
-              }} 
-            > 
+              }}
+            >
             </span>
           </div>
         </Form.Item>
@@ -166,26 +166,26 @@ function LoginPage() {
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <div className="check-box">
                 <input type="checkbox" />
-                <span style={{ fontFamily: "Noto Sans Khmer, Roboto, sans-serif", color: "hsl(0, 0%, 100%)"}}>{t('login.remember')}</span>
+                <span style={{ fontFamily: "Noto Sans Khmer, Roboto, sans-serif", color: "hsl(0, 0%, 100%)" }}>{t('login.remember')}</span>
               </div>
             </Form.Item>
           </div>
         </Form.Item>
 
         {/* Submit */}
-        <Form.Item style={{ width: '50%', justifyContent: 'center',  margin: '0 auto'}}>
+        <Form.Item style={{ width: '50%', justifyContent: 'center', margin: '0 auto' }}>
           <button className="login-title"
             type="submit"
-            style={{fontFamily: "Noto Sans Khmer, Roboto, sans-serif"}} 
+            style={{ fontFamily: "Noto Sans Khmer, Roboto, sans-serif" }}
           >
-            <LoginOutlined 
-            style={{ marginRight: "8px" }}  
+            <LoginOutlined
+              style={{ marginRight: "8px" }}
             />
             {t('login.submit')}
           </button>
         </Form.Item>
       </Form>
-    </div>  
+    </div>
   );
 }
 

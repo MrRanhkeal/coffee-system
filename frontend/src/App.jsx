@@ -21,7 +21,7 @@ import ReportSalePage from "./page/report/ReportSalePage";
 import SaleSummaryPage from "./page/report/SaleSummaryPage"; 
 import ReportExpensePage from "./page/report/ReportExpensePage";
 import ReportStockPage from "./page/report/ReportStockPage";
-import ReportProductPage from "./page/report/ReportProductPage";
+import ReportProductPage from "./page/report/ReportProductPage"; 
 function App() {
   return (
     <BrowserRouter>
@@ -66,7 +66,7 @@ function App() {
             path="/productreport"
             element={<ProtectedRoute permissionKey="productreport" element={<ReportProductPage />} />}
           />
-          <Route path="*" element={<h1>404-Route Not Found!</h1>} />
+            <Route path="*" element={<h1>404-Route Not Found!</h1>} />
         </Route>
 
         <Route>

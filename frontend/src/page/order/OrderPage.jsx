@@ -9,13 +9,12 @@ import {
     Table,
     Tag,
 } from "antd";
-import { formatDateServer, request, formatDateClient } from "../../util/helper";
-import { MdDelete } from "react-icons/md";
+import { formatDateServer, request, formatDateClient } from "../../util/helper"; 
 import MainPage from "../../component/layout/MainPage";
 import { IoMdEye } from "react-icons/io";
 import { Config } from "../../util/config";
 import dayjs from "dayjs";
-import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
+import { EyeOutlined } from "@ant-design/icons";
 import { FaSearch } from "react-icons/fa";
 import { useTranslation } from "react-i18next"; 
 import { useReactToPrint } from "react-to-print";
