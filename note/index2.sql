@@ -50,7 +50,7 @@ CREATE TABLE `order_detail` (
   KEY `product_id` (`product_id`),
   CONSTRAINT `order_detail_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
   CONSTRAINT `order_detail_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
-) i;
+) ;
 
 CREATE TABLE `orders` (
   `id` int NOT NULL AUTO_INCREMENT,
