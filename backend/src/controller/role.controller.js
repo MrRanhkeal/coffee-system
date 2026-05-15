@@ -97,4 +97,3 @@ exports.remove = async (req, res) => {
         logErr("role.remove",error,res);
     }
 };
-
